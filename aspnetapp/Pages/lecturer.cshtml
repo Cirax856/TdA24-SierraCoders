@@ -8,39 +8,39 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>@ViewBag.Title</title>
-    </head>
-    <body>
-        <p>Name: @Model.lecturer.title_before@Model.lecturer.first_name @Model.lecturer.middle_name @Model.lecturer.last_name @Model.lecturer.title_after</p>
-        <p>Picture: @Model.lecturer.picture_url</p>
-        <p>Location: @Model.lecturer.location</p>
-        <p>Claim: @Model.lecturer.claim</p>
-        <span>Bio: @Html.Raw(Model.lecturer.bio)</span>
-        <p>Tags: @{
-            foreach (Lecturer.Tag tag in Model.lecturer.tags) {
-                <a>@tag.name;</a>
+<head>
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <p>Name: @Model.lecturer.title_before@Model.lecturer.first_name @Model.lecturer.middle_name @Model.lecturer.last_name @Model.lecturer.title_after</p>
+    <img alt="Profile picture" src=@Model.lecturer.picture_url>
+    <p>Location: @Model.lecturer.location</p>
+    <p>Claim: @Model.lecturer.claim</p>
+    <span>Bio: @Html.Raw(Model.lecturer.bio)</span>
+    <p>Tags: @{
+        foreach (Lecturer.Tag tag in Model.lecturer.tags) {
+            <a>@tag.name;</a>
+        }
+    }</p>
+    <p>Price per hour: @Model.lecturer.price_per_hour</p>
+    <div>
+        <p>Telephone Number(s):</p>
+        <ul>
+            @{
+                foreach (string number in Model.lecturer.contact.telephone_numbers) {
+                    <li>@number</li>
+                }
             }
-        }</p>
-        <p>Price per hour: @Model.lecturer.price_per_hour</p>
-        <div>
-            <p>Telephone Numbers:</p>
-            <ul>
-                @{
-                    foreach (string number in Model.lecturer.contact.telephone_numbers) {
-                        <li>@number</li>
-                    }
-                }
-            </ul>
-            <p>Emails:</p>
-            <ul>
-                @{
+        </ul>
+        <p>Email(s):</p>
+        <ul>
+            @{
                 foreach (string email in Model.lecturer.contact.emails)
-                    {
-                        <li>@email</li>
-                    }
+                {
+                    <li>@email</li>
                 }
-            </ul>
-        </div>
-    </body>
+            }
+        </ul>
+    </div>
+</body>
 </html>
