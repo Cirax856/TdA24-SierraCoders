@@ -9,12 +9,6 @@ namespace aspnetapp.Pages
     public class lecturerModel : PageModel
     {
         public Lecturer lecturer { get; private set; }
-        public IWebHostEnvironment environment { get; private set; }
-
-        public lecturerModel(IWebHostEnvironment environment)
-        {
-            this.environment = environment;
-        }
 
         public IActionResult OnGet()
         {
