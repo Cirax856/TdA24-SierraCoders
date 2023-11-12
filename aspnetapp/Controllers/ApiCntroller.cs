@@ -28,16 +28,8 @@ namespace aspnetapp.Controllers
                     return StatusCode(400);
                 }
 
-                // validate
-                if (lecturer.contact.emails.Length < 1)
+                if (!Lecturer.IsValid(lecturer))
                     return StatusCode(400);
-                else
-                    lecturer.contact.emails = lecturer.contact.emails.Distinct().ToArray();
-
-                if (lecturer.contact.telephone_numbers.Length < 1)
-                    return StatusCode(400);
-                else
-                    lecturer.contact.telephone_numbers = lecturer.contact.telephone_numbers.Distinct().ToArray();
 
                 // TODO add to database
                 throw new NotImplementedException("/lecturers POST isn't implemented");
@@ -104,16 +96,8 @@ namespace aspnetapp.Controllers
                     return StatusCode(400);
                 }
 
-                // validate
-                if (lecturer.contact.emails.Length < 1)
+                if (!Lecturer.IsValid(lecturer))
                     return StatusCode(400);
-                else
-                    lecturer.contact.emails = lecturer.contact.emails.Distinct().ToArray();
-
-                if (lecturer.contact.telephone_numbers.Length < 1)
-                    return StatusCode(400);
-                else
-                    lecturer.contact.telephone_numbers = lecturer.contact.telephone_numbers.Distinct().ToArray();
 
                 // TODO get lecturer from db, is null return StatusCode(404), else put new data to db
                 throw new NotImplementedException("/lecturers/{guid} PUT isn't implemented");
