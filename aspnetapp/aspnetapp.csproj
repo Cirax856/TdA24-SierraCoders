@@ -6,4 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="lecturer.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="lecturer.json" />
+  </ItemGroup>
+
 </Project>

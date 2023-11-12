@@ -2,6 +2,7 @@
 
 namespace aspnetapp.Controllers
 {
+    [ApiController]
     public class ApiController : Controller
     {
         [HttpGet]

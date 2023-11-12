@@ -1,0 +1,15 @@
+﻿@page
+@model aspnetapp.Pages.lecturerModel
+@{
+    ViewBag.Title = "Lecturer";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+    <a>Name @Model.lecturer.title_before@Model.lecturer.first_name @Model.lecturer.middle_name @Model.lecturer.last_name @Model.lecturer.title_after</a>
+    </body>
+</html>
