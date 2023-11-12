@@ -8,8 +8,7 @@ namespace aspnetapp.Controllers
         [Route("api")]
         public IActionResult Api()
         {
-            Secret s = new Secret();
-            return Json(s);
+            return Json(new Secret());
         }
     }
 
