@@ -24,8 +24,8 @@
 
         public class Contact
         {
-            public string[] telephone_numbers;
-            public string[] emails;
+            public string[] telephone_numbers { get; set; }
+            public string[] emails { get; set; }
         }
     }
 }
