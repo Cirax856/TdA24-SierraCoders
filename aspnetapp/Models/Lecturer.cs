@@ -1,9 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace aspnetapp.Models
 {
-    public class Lecturer
+    public class Lecturer : ICloneable
     {
+        [JsonIgnore]
+        public string DisplayName
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(title_before) ? string.Empty : title_before
+                    + first_name
+                    + (string.IsNullOrWhiteSpace(middle_name) ? string.Empty : " " + middle_name)
+                    + last_name
+                    + (string.IsNullOrWhiteSpace(title_after) ? string.Empty : " " + title_after);
+            }
+        }
+
         [StringLength(36, MinimumLength = 36)]
         public Guid UUID { get; set; }
         public string? title_before { get; set; }
@@ -47,6 +61,38 @@ namespace aspnetapp.Models
         {
             public required string[] telephone_numbers { get; set; }
             public required string[] emails { get; set; }
+        }
+
+        public Lecturer Clone()
+        {
+            Tag[] tags = new Tag[this.tags.Length];
+            for (int i = 0; i < tags.Length; i++)
+                tags[i] = new Tag()
+                {
+                    uuid = this.tags[i].uuid,
+                    name = this.tags[i].name,
+                };
+
+            return new Lecturer()
+            {
+                UUID = this.UUID,
+                title_before = this.title_before,
+                first_name = this.first_name,
+                middle_name = this.middle_name,
+                last_name = this.last_name,
+                title_after = this.title_after,
+                picture_url = this.picture_url,
+                location = this.location,
+                claim = this.claim,
+                bio = this.bio,
+                tags = tags,
+                price_per_hour = this.price_per_hour,
+                contact = new Contact()
+                {
+                    telephone_numbers = this.contact.telephone_numbers,
+                    emails = this.contact.emails
+                }
+            };
         }
     }
 }
