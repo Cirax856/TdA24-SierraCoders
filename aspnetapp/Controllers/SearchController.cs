@@ -32,7 +32,7 @@ namespace aspnetapp.Controllers
                 Array.Copy(lecturers, _lecturers, lecturers.Length);
                 lecturers = new Lecturer[ratedLecturers.Length];
                 for (i = 0; i < ratedLecturers.Length; i++)
-                    lecturers[i] = _lecturers[ratedLecturers[i].OgIndex];
+                    lecturers[i] = _lecturers[ratedLecturers[i].OgIndex].Clone();
             }
             // TODO add filtering by price (from - to, ui - double slider?), by tags, by location
 
