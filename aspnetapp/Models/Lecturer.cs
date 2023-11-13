@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace aspnetapp.Models
 {
-    public class Lecturer : ICloneable
+    public class Lecturer
     {
         [JsonIgnore]
         public string DisplayName
