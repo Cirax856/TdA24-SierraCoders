@@ -27,12 +27,9 @@
                     index++;
                     found = true;
                 } else if (found)
-                {
                     score--;
-                } else
-                {
+                else
                     score -= 0.5f;
-                }
             }
 
             return new RatedString(s, ogIndex, score);
