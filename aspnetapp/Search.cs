@@ -15,22 +15,25 @@
 
         public static RatedString Rate(string s, int ogIndex, string input)
         {
-            float score = 0f;
+            float score = 2.5f;
             bool found = false;
             int index = 0;
 
-            for (int i = 0; i < s.Length && index < input.Length; i++)
+            int i;
+            for (i = 0; i < input.Length && index < s.Length; i++)
             {
-                if (s[i] == input[index])
+                if (input[i] == s[index])
                 {
                     score += 2f;
                     index++;
                     found = true;
                 } else if (found)
-                    score--;
+                    score -= 1f;
                 else
-                    score -= 0.5f;
+                    score -= 0.3f;
             }
+
+            score -= 0.2f * (input.Length - index);
 
             return new RatedString(s, ogIndex, score);
         }
