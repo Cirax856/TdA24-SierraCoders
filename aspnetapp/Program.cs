@@ -1,73 +1,90 @@
 using System.Text.Json.Serialization;
+using aspnetapp.Models;
+using Microsoft.EntityFrameworkCore;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+namespace aspnetapp {
+    static class Program {
+        internal static LecturerContext dbContext;
 
-// Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddHealthChecks();
-builder.Services.AddControllers();
+        static void Main(string[] args)
+        {
+            DbContextOptionsBuilder<LecturerContext> dbOptionsBuilder = new DbContextOptionsBuilder<LecturerContext>();
+            dbOptionsBuilder.UseInMemoryDatabase("LecturerList");
+            dbContext = new LecturerContext(dbOptionsBuilder.Options);
 
-// builder.Services.ConfigureHttpJsonOptions(options =>
-// {
-//     options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
-// });
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-WebApplication app = builder.Build();
+            // Add services to the container.
+            builder.Services.AddRazorPages();
+            builder.Services.AddHealthChecks();
+            builder.Services.AddControllers();
+            //builder.Services.AddDbContext<LecturerContext>(opt => opt.UseInMemoryDatabase("LecturerList"));
+            //builder.Services.AddScoped<LecturerContext>();
 
-app.MapHealthChecks("/healthz");
+            // builder.Services.ConfigureHttpJsonOptions(options =>
+            // {
+            //     options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+            // });
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+            WebApplication app = builder.Build();
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+            app.MapHealthChecks("/healthz");
 
-app.UseRouting();
+            // Configure the HTTP request pipeline.
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
-app.UseAuthorization();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
-app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseRouting();
 
-app.MapRazorPages();
+            app.UseAuthorization();
 
-CancellationTokenSource cancellation = new();
-app.Lifetime.ApplicationStopping.Register( () =>
-{
-    cancellation.Cancel();
-});
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-app.MapGet("/Environment", () =>
-{
-    return new EnvironmentInfo();
-});
+            app.MapRazorPages();
 
-// This API demonstrates how to use task cancellation
-// to support graceful container shutdown via SIGTERM.
-// The method itself is an example and not useful.
-app.MapGet("/Delay/{value}", async (int value) =>
-{
-    try
-    {
-        await Task.Delay(value, cancellation.Token);
+            CancellationTokenSource cancellation = new();
+            app.Lifetime.ApplicationStopping.Register(() =>
+            {
+                cancellation.Cancel();
+            });
+
+            app.MapGet("/Environment", () =>
+            {
+                return new EnvironmentInfo();
+            });
+
+            // This API demonstrates how to use task cancellation
+            // to support graceful container shutdown via SIGTERM.
+            // The method itself is an example and not useful.
+            app.MapGet("/Delay/{value}", async (int value) =>
+            {
+                try
+                {
+                    await Task.Delay(value, cancellation.Token);
+                }
+                catch (TaskCanceledException)
+                {
+                }
+
+                return new Operation(value);
+            });
+
+            app.Run();
+        }
     }
-    catch(TaskCanceledException)
+
+    [JsonSerializable(typeof(EnvironmentInfo))]
+    [JsonSerializable(typeof(Operation))]
+    internal partial class AppJsonSerializerContext : JsonSerializerContext
     {
     }
-    
-    return new Operation(value);
-});
 
-app.Run();
-
-[JsonSerializable(typeof(EnvironmentInfo))]
-[JsonSerializable(typeof(Operation))]
-internal partial class AppJsonSerializerContext : JsonSerializerContext
-{
+    public record struct Operation(int Delay);
 }
-
-public record struct Operation(int Delay);

@@ -9,81 +9,19 @@ namespace aspnetapp.Controllers
     [Route("lecturers")]
     public class LecturersController : Controller
     {
+        private LecturerContext context => Program.dbContext;
+        public LecturersController()
+        {
+        }
+
         [HttpPost]
-        public ActionResult Post()
+        public async Task<ActionResult> Post()
         {
             try
             {
                 string requestText;
                 using (StreamReader reader = new StreamReader(Request.Body))
-                    requestText = reader.ReadToEnd();
-
-                Lecturer lecturer;
-                try
-                {
-                    lecturer = JsonSerializer.Deserialize<Lecturer>(requestText);
-                } catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                    return StatusCode(400);
-                }
-
-                if (!Lecturer.IsValid(lecturer))
-                    return StatusCode(400);
-
-                // TODO add to database
-                throw new NotImplementedException("/lecturers POST isn't implemented");
-
-                return Json(lecturer);
-            } catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return StatusCode(500); // Internal server error
-            }
-        }
-
-        [HttpGet]
-        public ActionResult Get()
-        {
-            Lecturer[] lectures;
-            // TODO get lecturers from db (SELECT *)
-
-            // testing only
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            string resourceName = "aspnetapp.lecturer.json";
-
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                lectures = new Lecturer[]
-                {
-                    JsonSerializer.Deserialize<Lecturer>(reader.ReadToEnd())
-                };
-            }
-
-            return Json(lectures);
-        }
-
-        [HttpGet]
-        [Route("{guid}")]
-        public ActionResult SpecificGet(Guid guid)
-        {
-            Lecturer lecturer;
-            // TODO get lecturer from db
-            throw new NotImplementedException("/lecturers/{guid} GET isn't implemented");
-
-            return Json(lecturer);
-        }
-
-        [HttpPut]
-        [Route("{guid}")]
-        public ActionResult Put(Guid guid)
-        {
-            try
-            {
-                string requestText;
-                using (StreamReader reader = new StreamReader(Request.Body))
-                    requestText = reader.ReadToEnd();
+                    requestText = await reader.ReadToEndAsync();
 
                 Lecturer lecturer;
                 try
@@ -99,10 +37,74 @@ namespace aspnetapp.Controllers
                 if (!Lecturer.IsValid(lecturer))
                     return StatusCode(400);
 
-                // TODO get lecturer from db, is null return StatusCode(404), else put new data to db
-                throw new NotImplementedException("/lecturers/{guid} PUT isn't implemented");
+                context.lecturers.Add(lecturer);
+                context.SaveChanges();
 
                 return Json(lecturer);
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500); // Internal server error
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Get()
+        {
+            DbLecturer[] _lectures = context.lecturers.ToArray();
+
+            return Json(_lectures.Select(lecturer => (Lecturer)lecturer).ToArray());
+        }
+
+        [HttpGet]
+        [Route("{guid}")]
+        public ActionResult SpecificGet(Guid guid)
+        {
+            DbLecturer[] lecturers = context.lecturers.ToArray();
+            for (int i = 0; i < lecturers.Length; i++)
+                if (lecturers[i].UUID == guid)
+                    return Json(lecturers[i]);
+
+            return StatusCode(404);
+        }
+
+        [HttpPut]
+        [Route("{guid}")]
+        public async Task<ActionResult> Put(Guid guid)
+        {
+            try
+            {
+                string requestText;
+                using (StreamReader reader = new StreamReader(Request.Body))
+                    requestText = await reader.ReadToEndAsync();
+
+                Lecturer lecturer;
+                try
+                {
+                    lecturer = JsonSerializer.Deserialize<Lecturer>(requestText);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                    return StatusCode(400);
+                }
+
+                if (!Lecturer.IsValid(lecturer))
+                    return StatusCode(400);
+
+                DbLecturer[] lecturers = context.lecturers.ToArray();
+                for (int i = 0; i < lecturers.Length; i++)
+                    if (lecturers[i].UUID == guid)
+                    {
+                        context.lecturers.Remove(lecturers[i]);
+                        context.lecturers.Add(lecturer);
+                        context.SaveChanges();
+                        JsonResult res = Json(lecturers[i]);
+                        res.StatusCode = 204;
+                        return res;
+                    }
+
+                return StatusCode(404);
             }
             catch (Exception ex)
             {
@@ -115,13 +117,16 @@ namespace aspnetapp.Controllers
         [Route("{guid}")]
         public ActionResult Delete(Guid guid)
         {
-            // TODO if lecturer with guid exists, delete, StatusCode(204), else StatusCode(404)
-            throw new NotImplementedException("/lecturers/{guid} DELETE isn't implemented");
-        }
-    }
+            DbLecturer[] lecturers = context.lecturers.ToArray();
+            for (int i = 0; i < lecturers.Length; i++)
+                if (lecturers[i].UUID == guid)
+                {
+                    context.lecturers.Remove(lecturers[i]);
+                    context.SaveChanges();
+                    return StatusCode(204);
+                }
 
-    public class Secret
-    {
-        public string secret { get; set; } = "The cake is a lie";
+            return StatusCode(404);
+        }
     }
 }
