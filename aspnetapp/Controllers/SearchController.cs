@@ -10,33 +10,38 @@ namespace aspnetapp.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            Lecturer[] lecturers;
-            // TODO get lecturers from db
-            throw new NotImplementedException("/search GET isn't implemented");
-
-            if (Request.Query.ContainsKey("name"))
+            try
             {
-                // sort
-                Searcher.RatedString[] ratedLecturers =
-                    Searcher.Search(lecturers, lecturer => lecturer.DisplayName, Request.Query["name"]);
+                Lecturer[] lecturers = Program.dbContext.lecturers.Select(lecturer => (Lecturer)lecturer).ToArray();
 
-                // remove entries with score lower than or equal to 0
-                int i;
-                for (i = 0; i < ratedLecturers.Length; i++)
-                    if (ratedLecturers[i].Score <= 0f)
-                        break;
+                if (Request.Query.ContainsKey("name"))
+                {
+                    // sort
+                    Searcher.RatedString[] ratedLecturers =
+                        Searcher.Search(lecturers, lecturer => lecturer.DisplayName, Request.Query["name"]);
 
-                ratedLecturers = ratedLecturers.Take(i).ToArray();
+                    // remove entries with score lower than or equal to 0
+                    int i;
+                    for (i = 0; i < ratedLecturers.Length; i++)
+                        if (ratedLecturers[i].Score <= 0f)
+                            break;
 
-                Lecturer[] _lecturers = new Lecturer[lecturers.Length];
-                Array.Copy(lecturers, _lecturers, lecturers.Length);
-                lecturers = new Lecturer[ratedLecturers.Length];
-                for (i = 0; i < ratedLecturers.Length; i++)
-                    lecturers[i] = _lecturers[ratedLecturers[i].OgIndex].Clone();
+                    ratedLecturers = ratedLecturers.Take(i).ToArray();
+
+                    Lecturer[] _lecturers = new Lecturer[lecturers.Length];
+                    Array.Copy(lecturers, _lecturers, lecturers.Length);
+                    lecturers = new Lecturer[ratedLecturers.Length];
+                    for (i = 0; i < ratedLecturers.Length; i++)
+                        lecturers[i] = _lecturers[ratedLecturers[i].OgIndex].Clone();
+                }
+                // TODO add filtering by price (from - to, ui - double slider?), by tags, by location
+
+                return Json(lecturers);
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500); // Internal server error
             }
-            // TODO add filtering by price (from - to, ui - double slider?), by tags, by location
-
-            return Json(lecturers);
         }
     }
 }
