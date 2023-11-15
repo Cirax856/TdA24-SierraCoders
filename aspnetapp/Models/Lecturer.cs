@@ -11,7 +11,7 @@ namespace aspnetapp.Models
         {
             get
             {
-                return string.IsNullOrWhiteSpace(title_before) ? string.Empty : title_before
+                return (string.IsNullOrWhiteSpace(title_before) ? string.Empty : title_before)
                     + first_name
                     + (string.IsNullOrWhiteSpace(middle_name) ? string.Empty : " " + middle_name)
                     + " " + last_name
