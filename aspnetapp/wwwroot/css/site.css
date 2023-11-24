@@ -1,22 +1,33 @@
-html {
-  font-size: 14px;
+@import url('https://fonts.googleapis.com/css2?family=Lalezar&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.container {
+    width: 100vw;
+    height: 90vh;
+    background-color: #74C7D3;
+    padding: 10px;
+    font-family: 'Open Sans', Arial, sans-serif;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.topbar {
+    width: 100vw;
+    height: 10vh;
+    background-color: #00384D;
+    display: flex;
+    align-items: center;
+    font-family: 'Lalezar';
+    font-weight: 300;
+    font-size: 22px;
+    color: white;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
+.topbar > img {
+    height: 90%;
+    width: auto;
+    padding: 0 10px;
 }
