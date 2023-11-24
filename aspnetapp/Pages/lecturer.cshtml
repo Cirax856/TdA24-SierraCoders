@@ -2,45 +2,48 @@
 @using aspnetapp.Models
 @model aspnetapp.Pages.lecturerModel
 @{
-    ViewBag.Title = "Lecturer";
-    Layout = "";
+	ViewBag.Title = "Lecturer";
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>@ViewBag.Title</title>
+	<title>@ViewBag.Title</title>
 </head>
 <body>
-    <p>Name: @Model.lecturer.DisplayName</p>
-    <img alt="Profile picture" src=@Model.lecturer.picture_url>
-    <p>Location: @Model.lecturer.location</p>
-    <p>Claim: @Model.lecturer.claim</p>
-    <span>Bio: @Html.Raw(Model.lecturer.bio)</span>
-    <p>Tags: @{
-        foreach (Lecturer.Tag tag in Model.lecturer.tags) {
-            <a>@tag.name;</a>
-        }
-    }</p>
-    <p>Price per hour: @Model.lecturer.price_per_hour</p>
-    <div>
-        <p>Telephone Number(s):</p>
-        <ul>
-            @{
-                foreach (string number in Model.lecturer.contact.telephone_numbers) {
-                    <li>@number</li>
-                }
-            }
-        </ul>
-        <p>Email(s):</p>
-        <ul>
-            @{
-                foreach (string email in Model.lecturer.contact.emails)
-                {
-                    <li>@email</li>
-                }
-            }
-        </ul>
-    </div>
+	<p>Name: @Model.lecturer.DisplayName</p>
+	<img alt="Profile picture" src=@Model.lecturer.picture_url>
+	<p>Location: @Model.lecturer.location</p>
+	<p>Claim: @Model.lecturer.claim</p>
+	<span>Bio: @Html.Raw(Model.lecturer.bio)</span>
+	<p>
+		Tags: @{
+			foreach (Lecturer.Tag tag in Model.lecturer.tags)
+			{
+				<a>@tag.name;</a>
+			}
+		}
+	</p>
+	<p>Price per hour: @Model.lecturer.price_per_hour</p>
+	<div>
+		<p>Telephone Number(s):</p>
+		<ul>
+			@{
+				foreach (string number in Model.lecturer.contact.telephone_numbers)
+				{
+					<li>@number</li>
+				}
+			}
+		</ul>
+		<p>Email(s):</p>
+		<ul>
+			@{
+				foreach (string email in Model.lecturer.contact.emails)
+				{
+					<li>@email</li>
+				}
+			}
+		</ul>
+	</div>
 </body>
 </html>
