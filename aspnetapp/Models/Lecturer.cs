@@ -19,7 +19,6 @@ namespace aspnetapp.Models
             }
         }
 
-        [StringLength(36, MinimumLength = 36)]
         public Guid UUID { get; set; }
         public string? title_before { get; set; }
         public required string first_name { get; set; }
@@ -55,14 +54,51 @@ namespace aspnetapp.Models
             else
                 lecturer.contact.telephone_numbers = lecturer.contact.telephone_numbers.Distinct().ToArray();
 
+            for (int i = 0; i < lecturer.tags.Length; i++)
+            {
+                Tag tag = lecturer.tags[i];
+                if (!tag.uuid.HasValue)
+                    tag.uuid = tag.name.GetHash();
+                if (!Program.dbContext.tags.Contains(tag))
+                {
+                    Program.dbContext.tags.Add(tag);
+                    Program.dbContext.SaveChanges();
+                }
+            }
+
             return true;
         }
 
         public class Tag
         {
             [Key]
-            public required Guid uuid { get; set; }
+            public Guid? uuid { get; set; }
             public required string name { get; set; }
+
+            public static bool operator ==(Tag a, Tag b)
+                => a.Equals(b);
+            public static bool operator !=(Tag a, Tag b)
+                => !a.Equals(b);
+
+            public override bool Equals(object? obj)
+            {
+                if (obj is null)
+                    return false;
+                else if (obj is Tag other)
+                    return Equals(other);
+                else
+                    return false;
+            }
+
+            public bool Equals(Tag other)
+            {
+                if (!uuid.HasValue && uuid.HasValue == other.uuid.HasValue)
+                    return true;
+                else
+                    return uuid.HasValue && other.uuid.HasValue && uuid.Value == other.uuid.Value;
+            }
+
+            public override int GetHashCode() => uuid.HasValue ? uuid.Value.GetHashCode() : name.GetHashCode();
         }
 
         public class Contact
