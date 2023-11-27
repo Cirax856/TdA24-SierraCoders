@@ -57,7 +57,7 @@ namespace aspnetapp.Models
             for (int i = 0; i < lecturer.tags.Length; i++)
             {
                 Tag tag = lecturer.tags[i];
-                if (!tag.uuid.HasValue)
+                if (tag.uuid == default)
                     tag.uuid = tag.name.GetHash();
                 if (!Program.dbContext.tags.Contains(tag))
                 {
@@ -72,7 +72,7 @@ namespace aspnetapp.Models
         public class Tag
         {
             [Key]
-            public Guid? uuid { get; set; }
+            public Guid uuid { get; set; }
             public required string name { get; set; }
 
             public static bool operator ==(Tag a, Tag b)
@@ -91,14 +91,9 @@ namespace aspnetapp.Models
             }
 
             public bool Equals(Tag other)
-            {
-                if (!uuid.HasValue && uuid.HasValue == other.uuid.HasValue)
-                    return true;
-                else
-                    return uuid.HasValue && other.uuid.HasValue && uuid.Value == other.uuid.Value;
-            }
+                => uuid.Equals(other.uuid);
 
-            public override int GetHashCode() => uuid.HasValue ? uuid.Value.GetHashCode() : name.GetHashCode();
+            public override int GetHashCode() => uuid.GetHashCode();
         }
 
         public class Contact
