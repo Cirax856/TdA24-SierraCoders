@@ -40,12 +40,18 @@ namespace aspnetapp.Models
                 lecturer.tags = new Tag[0];
 
             if (lecturer.contact.emails.Length < 1)
+            {
+                Log.Info($"Lecturer invalid because: Not enought emails, Lecturer: {lecturer}");
                 return false;
+            }
             else
                 lecturer.contact.emails = lecturer.contact.emails.Distinct().ToArray();
 
             if (lecturer.contact.telephone_numbers.Length < 1)
+            {
+                Log.Info($"Lecturer invalid because: Not enought telephone numbers, Lecturer: {lecturer}");
                 return false;
+            }
             else
                 lecturer.contact.telephone_numbers = lecturer.contact.telephone_numbers.Distinct().ToArray();
 
