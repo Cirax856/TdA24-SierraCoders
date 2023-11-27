@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace aspnetapp
 {
@@ -23,6 +24,9 @@ namespace aspnetapp
             => log(message, LogLevel.Error);
         public static void Exception(Exception ex)
             => log(ex.ToString(), LogLevel.Error);
+
+        public static void Request(HttpRequest request)
+            => log($"[{request.Method}]".PadRight(9) + request.GetDisplayUrl(), LogLevel.Debug);
 
         internal static void Clear()
         {

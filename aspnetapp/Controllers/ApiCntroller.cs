@@ -18,7 +18,7 @@ namespace aspnetapp.Controllers
         [HttpPost]
         public async Task<ActionResult> Post()
         {
-            Log.Debug(Request.GetDisplayUrl());
+            Log.Request(Request);
             try
             {
                 string requestText;
@@ -54,7 +54,7 @@ namespace aspnetapp.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            Log.Debug(Request.GetDisplayUrl());
+            Log.Request(Request);
             DbLecturer[] _lectures = context.lecturers.ToArray();
 
             return Json(_lectures.Select(lecturer => (Lecturer)lecturer).ToArray());
@@ -64,7 +64,7 @@ namespace aspnetapp.Controllers
         [Route("{guid}")]
         public ActionResult SpecificGet(Guid guid)
         {
-            Log.Debug(Request.GetDisplayUrl());
+            Log.Request(Request);
             DbLecturer[] lecturers = context.lecturers.ToArray();
             for (int i = 0; i < lecturers.Length; i++)
                 if (lecturers[i].UUID == guid)
@@ -77,7 +77,7 @@ namespace aspnetapp.Controllers
         [Route("{guid}")]
         public async Task<ActionResult> Put(Guid guid)
         {
-            Log.Debug(Request.GetDisplayUrl());
+            Log.Request(Request);
             try
             {
                 string requestText;
@@ -124,7 +124,7 @@ namespace aspnetapp.Controllers
         [Route("{guid}")]
         public ActionResult Delete(Guid guid)
         {
-            Log.Debug(Request.GetDisplayUrl());
+            Log.Request(Request);
             DbLecturer[] lecturers = context.lecturers.ToArray();
             for (int i = 0; i < lecturers.Length; i++)
                 if (lecturers[i].UUID == guid)
