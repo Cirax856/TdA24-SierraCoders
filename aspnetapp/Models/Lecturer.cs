@@ -155,7 +155,7 @@ namespace aspnetapp.Models
                 location = lecturer.location,
                 claim = lecturer.claim,
                 bio = lecturer.bio,
-                tags = lecturer.tags,
+                tags = lecturer.tags.ToList(),
                 price_per_hour = lecturer.price_per_hour,
                 emails = lecturer.contact.emails,
                 telephone_numbers = lecturer.contact.emails
@@ -175,7 +175,7 @@ namespace aspnetapp.Models
         public string? location { get; set; }
         public string? claim { get; set; }
         public string? bio { get; set; }
-        public Tag[] tags { get; set; }
+        public ICollection<Tag> tags { get; set; }
         public uint? price_per_hour { get; set; }
         public string[] telephone_numbers { get; set; }
         public string[] emails { get; set; }
@@ -193,7 +193,7 @@ namespace aspnetapp.Models
                 location = dbLecturer.location,
                 claim = dbLecturer.claim,
                 bio = dbLecturer.bio,
-                tags = dbLecturer.tags,
+                tags = dbLecturer.tags.ToArray(),
                 price_per_hour = dbLecturer.price_per_hour,
                 contact = new Contact()
                 {
