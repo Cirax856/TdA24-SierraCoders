@@ -33,6 +33,7 @@ namespace aspnetapp.Controllers
                 catch (Exception ex)
                 {
                     Log.Exception(ex);
+                    Log.Info($"Request text: {requestText}");
                     return StatusCode(400);
                 }
 
@@ -91,6 +92,7 @@ namespace aspnetapp.Controllers
                 catch (Exception ex)
                 {
                     Log.Exception(ex);
+                    Log.Info($"Request text: {requestText}");
                     return StatusCode(400);
                 }
 
