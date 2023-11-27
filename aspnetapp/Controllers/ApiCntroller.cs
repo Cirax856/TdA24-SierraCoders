@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace aspnetapp.Controllers
 {
     [ApiController]
-    [Route("lecturers")]
+    [Route("api/lecturers")]
     public class LecturersController : Controller
     {
         private LecturerContext context => Program.dbContext;
