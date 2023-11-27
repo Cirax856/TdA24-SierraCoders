@@ -38,20 +38,21 @@ namespace aspnetapp.Models
             if (lecturer.tags == null)
                 lecturer.tags = new Tag[0];
 
-            if (lecturer.contact.emails.Length < 1)
+            // wtf is api specification is shit
+            /*if (lecturer.contact.emails.Length < 1)
             {
                 Log.Info($"Lecturer invalid because: Not enought emails, Lecturer: {lecturer}");
                 return false;
             }
-            else
+            else*/
                 lecturer.contact.emails = lecturer.contact.emails.Distinct().ToArray();
 
-            if (lecturer.contact.telephone_numbers.Length < 1)
+            /*if (lecturer.contact.telephone_numbers.Length < 1)
             {
                 Log.Info($"Lecturer invalid because: Not enought telephone numbers, Lecturer: {lecturer}");
                 return false;
             }
-            else
+            else*/
                 lecturer.contact.telephone_numbers = lecturer.contact.telephone_numbers.Distinct().ToArray();
 
             for (int i = 0; i < lecturer.tags.Length; i++)
@@ -68,6 +69,9 @@ namespace aspnetapp.Models
 
             return true;
         }
+
+        public override string ToString()
+            => $"[Guid: {UUID}, Name: {DisplayName}, Picture url: {picture_url}, Location: {location}, Claim: {claim}, Price per hour: {price_per_hour}, Contact: {contact}]";
 
         public class Tag
         {
@@ -100,6 +104,9 @@ namespace aspnetapp.Models
         {
             public required string[] telephone_numbers { get; set; }
             public required string[] emails { get; set; }
+
+            public override string ToString()
+                => $"[Phone numbers: {string.Join(',', telephone_numbers)}, Emails: {string.Join(',', emails)}]";
         }
 
         public Lecturer Clone()
