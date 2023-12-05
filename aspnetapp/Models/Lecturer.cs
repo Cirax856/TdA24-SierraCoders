@@ -38,12 +38,31 @@ namespace aspnetapp.Models
             if (lecturer.UUID == default)
             {
                 lecturer.UUID = lecturer.DisplayName.GetHash();
-                Log.Debug($"Created lecturer uuid: {lecturer.UUID}, Name: {lecturer.DisplayName}");
+                Log.Info($"Created lecturer uuid: {lecturer.UUID}, Name: {lecturer.DisplayName}");
+            }
+
+            if (string.IsNullOrWhiteSpace(lecturer.first_name))
+            {
+                Log.Info($"Lecturer isn't valid because first name \"{lecturer.first_name}\" is required");
+                return false;
+            } else if (string.IsNullOrWhiteSpace(lecturer.last_name))
+            {
+                Log.Info($"Lecturer isn't valid because last name \"{lecturer.last_name}\" is required");
+                return false;
             }
 
             if (lecturer.tags == null)
                 lecturer.tags = new Tag[0];
 
+            if (lecturer.contact.emails == null || lecturer.contact.emails.Length < 1)
+            {
+                Log.Info($"Lecturer isn't valid because at least 1 email is required");
+                return false;
+            } else if (lecturer.contact.telephone_numbers == null || lecturer.contact.telephone_numbers.Length < 1)
+            {
+                Log.Info($"Lecturer isn't valid because at least 1 telephone number is required");
+                return false;
+            }
             lecturer.contact.emails = lecturer.contact.emails.Distinct().ToArray();
 
             lecturer.contact.telephone_numbers = lecturer.contact.telephone_numbers.Distinct().ToArray();
