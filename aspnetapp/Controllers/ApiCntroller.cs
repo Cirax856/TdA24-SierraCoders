@@ -112,7 +112,9 @@ namespace aspnetapp.Controllers
                 }
 
                 if (Database.ContainsKey(guid)) {
+                    Lecturer oldLecturer = Database.GetLecturer(guid);
                     Database.Remove(guid);
+                    lecturer = oldLecturer.Apply(lecturer);
                     Database.AddLectuer(lecturer);
                     JsonResult res = Json(lecturer);
                     res.StatusCode = 200;
