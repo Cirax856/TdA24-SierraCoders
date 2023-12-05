@@ -101,7 +101,7 @@ namespace aspnetapp.Controllers
                     Database.Remove(guid);
                     Database.AddLectuer(lecturer);
                     JsonResult res = Json(lecturer);
-                    res.StatusCode = 204;
+                    res.StatusCode = 200;
                     return res;
                 }
 
