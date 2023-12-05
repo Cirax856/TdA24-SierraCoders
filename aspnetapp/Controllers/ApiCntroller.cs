@@ -39,10 +39,14 @@ namespace aspnetapp.Controllers
                 Log.Debug(lecturer.ToString());
 
                 if (!Lecturer.Validate(lecturer))
+                {
+                    Log.Debug("400 ERROR");
                     return StatusCode(400);
+                }
 
                 Database.AddLectuer(lecturer);
 
+                Log.Debug("200 OK");
                 return Json(lecturer);
             } catch (Exception ex)
             {
@@ -64,9 +68,15 @@ namespace aspnetapp.Controllers
         {
             Log.Request(Request);
             if (Database.TryGetLecturer(guid, out Lecturer lecturer))
+            {
+                Log.Debug("200 OK");
                 return Json(lecturer);
+            }
             else
+            {
+                Log.Debug("404 ERROR");
                 return StatusCode(404);
+            }
         }
 
         [HttpPut]
@@ -95,13 +105,17 @@ namespace aspnetapp.Controllers
                 Log.Debug(lecturer.ToString());
 
                 if (!Lecturer.Validate(lecturer))
+                {
+                    Log.Debug("400 ERROR");
                     return StatusCode(400);
+                }
 
                 if (Database.ContainsKey(guid)) {
                     Database.Remove(guid);
                     Database.AddLectuer(lecturer);
                     JsonResult res = Json(lecturer);
                     res.StatusCode = 200;
+                    Log.Debug("200 OK");
                     return res;
                 }
 
@@ -122,9 +136,11 @@ namespace aspnetapp.Controllers
             if (Database.lectuerers.ContainsKey(guid))
             {
                 Database.Remove(guid);
+                Log.Debug("204 OK");
                 return StatusCode(204);
             }
 
+            Log.Debug("404 ERROR");
             return StatusCode(404);
         }
     }
