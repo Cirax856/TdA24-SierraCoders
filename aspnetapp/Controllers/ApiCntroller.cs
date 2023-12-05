@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Net;
+using System.Reflection;
 using System.Text.Json;
 using aspnetapp.Models;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -33,7 +34,7 @@ namespace aspnetapp.Controllers
                 {
                     Log.Exception(ex);
                     Log.Info($"Request text: {requestText}");
-                    return StatusCode(400);
+                    return statusWithJson(400);
                 }
 
                 Log.Debug(lecturer.ToString());
@@ -41,7 +42,7 @@ namespace aspnetapp.Controllers
                 if (!Lecturer.Validate(lecturer))
                 {
                     Log.Debug("400 ERROR");
-                    return StatusCode(400);
+                    return statusWithJson(400);
                 }
 
                 Database.AddLectuer(lecturer);
@@ -51,7 +52,7 @@ namespace aspnetapp.Controllers
             } catch (Exception ex)
             {
                 Log.Exception(ex);
-                return StatusCode(500); // Internal server error
+                return statusWithJson(500); // Internal server error
             }
         }
 
@@ -75,7 +76,7 @@ namespace aspnetapp.Controllers
             else
             {
                 Log.Debug("404 ERROR");
-                return StatusCode(404);
+                return statusWithJson(404);
             }
         }
 
@@ -99,7 +100,7 @@ namespace aspnetapp.Controllers
                 {
                     Log.Exception(ex);
                     Log.Info($"Request text: {requestText}");
-                    return StatusCode(400);
+                    return statusWithJson(400);
                 }
 
                 Log.Debug(lecturer.ToString());
@@ -107,7 +108,7 @@ namespace aspnetapp.Controllers
                 if (!Lecturer.Validate(lecturer))
                 {
                     Log.Debug("400 ERROR");
-                    return StatusCode(400);
+                    return statusWithJson(400);
                 }
 
                 if (Database.ContainsKey(guid)) {
@@ -119,12 +120,12 @@ namespace aspnetapp.Controllers
                     return res;
                 }
 
-                return StatusCode(404);
+                return statusWithJson(404);
             }
             catch (Exception ex)
             {
                 Log.Exception(ex);
-                return StatusCode(500); // Internal server error
+                return statusWithJson(500); // Internal server error
             }
         }
 
@@ -137,11 +138,22 @@ namespace aspnetapp.Controllers
             {
                 Database.Remove(guid);
                 Log.Debug("204 OK");
-                return StatusCode(204);
+                return statusWithJson(204);
             }
 
             Log.Debug("404 ERROR");
-            return StatusCode(404);
+            return statusWithJson(404);
+        }
+
+        private ActionResult statusWithJson(int statusCode)
+        {
+            JsonResult res = Json(new StatusResponse()
+            {
+                code = statusCode,
+                message = ((HttpStatusCode)statusCode).ToString()
+            });
+            res.StatusCode = statusCode;
+            return res;
         }
     }
 }
