@@ -21,9 +21,9 @@ namespace aspnetapp.Models
 
         public Guid UUID { get; set; }
         public string? title_before { get; set; }
-        public required string first_name { get; set; }
+        public string first_name { get; set; }
         public string? middle_name { get; set; }
-        public required string last_name { get; set; }
+        public string last_name { get; set; }
         public string? title_after { get; set; }
         public string? picture_url { get; set; }
         public string? location { get; set; }
@@ -38,33 +38,17 @@ namespace aspnetapp.Models
             if (lecturer.tags == null)
                 lecturer.tags = new Tag[0];
 
-            // wtf is api specification is shit
-            /*if (lecturer.contact.emails.Length < 1)
-            {
-                Log.Info($"Lecturer invalid because: Not enought emails, Lecturer: {lecturer}");
-                return false;
-            }
-            else*/
-                lecturer.contact.emails = lecturer.contact.emails.Distinct().ToArray();
+            lecturer.contact.emails = lecturer.contact.emails.Distinct().ToArray();
 
-            /*if (lecturer.contact.telephone_numbers.Length < 1)
-            {
-                Log.Info($"Lecturer invalid because: Not enought telephone numbers, Lecturer: {lecturer}");
-                return false;
-            }
-            else*/
-                lecturer.contact.telephone_numbers = lecturer.contact.telephone_numbers.Distinct().ToArray();
+            lecturer.contact.telephone_numbers = lecturer.contact.telephone_numbers.Distinct().ToArray();
 
             for (int i = 0; i < lecturer.tags.Length; i++)
             {
                 Tag tag = lecturer.tags[i];
                 if (tag.uuid == default)
                     tag.uuid = tag.name.GetHash();
-                if (!Program.dbContext.tags.Contains(tag))
-                {
-                    Program.dbContext.tags.Add(tag);
-                    Program.dbContext.SaveChanges();
-                }
+                if (!Database.ContainsTag(tag))
+                    Database.AddTag(tag);
             }
 
             return true;
@@ -75,9 +59,8 @@ namespace aspnetapp.Models
 
         public class Tag
         {
-            [Key]
             public Guid uuid { get; set; }
-            public required string name { get; set; }
+            public string name { get; set; }
 
             public static bool operator ==(Tag a, Tag b)
                 => a.Equals(b);
@@ -102,8 +85,8 @@ namespace aspnetapp.Models
 
         public class Contact
         {
-            public required string[] telephone_numbers { get; set; }
-            public required string[] emails { get; set; }
+            public string[] telephone_numbers { get; set; }
+            public string[] emails { get; set; }
 
             public override string ToString()
                 => $"[Phone numbers: {string.Join(',', telephone_numbers)}, Emails: {string.Join(',', emails)}]";
@@ -140,66 +123,5 @@ namespace aspnetapp.Models
                 }
             };
         }
-
-
-        public static implicit operator DbLecturer(Lecturer lecturer)
-            => new DbLecturer()
-            {
-                UUID = lecturer.UUID,
-                title_before = lecturer.title_before,
-                first_name = lecturer.first_name,
-                middle_name = lecturer.middle_name,
-                last_name = lecturer.last_name,
-                title_after = lecturer.title_after,
-                picture_url = lecturer.picture_url,
-                location = lecturer.location,
-                claim = lecturer.claim,
-                bio = lecturer.bio,
-                tags = lecturer.tags.ToList(),
-                price_per_hour = lecturer.price_per_hour,
-                emails = lecturer.contact.emails,
-                telephone_numbers = lecturer.contact.emails
-            };
-    }
-
-    public class DbLecturer
-    {
-        [Key]
-        public Guid UUID { get; set; }
-        public string? title_before { get; set; }
-        public string first_name { get; set; }
-        public string? middle_name { get; set; }
-        public string last_name { get; set; }
-        public string? title_after { get; set; }
-        public string? picture_url { get; set; }
-        public string? location { get; set; }
-        public string? claim { get; set; }
-        public string? bio { get; set; }
-        public ICollection<Tag> tags { get; set; }
-        public uint? price_per_hour { get; set; }
-        public string[] telephone_numbers { get; set; }
-        public string[] emails { get; set; }
-
-        public static implicit operator Lecturer(DbLecturer dbLecturer)
-            => new Lecturer()
-            {
-                UUID = dbLecturer.UUID,
-                title_before = dbLecturer.title_before,
-                first_name = dbLecturer.first_name,
-                middle_name = dbLecturer.middle_name,
-                last_name = dbLecturer.last_name,
-                title_after = dbLecturer.title_after,
-                picture_url = dbLecturer.picture_url,
-                location = dbLecturer.location,
-                claim = dbLecturer.claim,
-                bio = dbLecturer.bio,
-                tags = dbLecturer.tags.ToArray(),
-                price_per_hour = dbLecturer.price_per_hour,
-                contact = new Contact()
-                {
-                    emails = dbLecturer.emails,
-                    telephone_numbers = dbLecturer.telephone_numbers
-                }
-            };
     }
 }
