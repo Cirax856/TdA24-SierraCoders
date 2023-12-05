@@ -36,7 +36,10 @@ namespace aspnetapp.Models
         public static bool Validate(Lecturer lecturer)
         {
             if (lecturer.UUID == default)
+            {
                 lecturer.UUID = lecturer.DisplayName.GetHash();
+                Log.Debug($"Created lecturer uuid: {lecturer.UUID}, Name: {lecturer.DisplayName}");
+            }
 
             if (lecturer.tags == null)
                 lecturer.tags = new Tag[0];

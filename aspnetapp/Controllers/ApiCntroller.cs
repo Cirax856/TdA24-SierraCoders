@@ -36,6 +36,8 @@ namespace aspnetapp.Controllers
                     return StatusCode(400);
                 }
 
+                Log.Debug(lecturer.ToString());
+
                 if (!Lecturer.Validate(lecturer))
                     return StatusCode(400);
 
@@ -89,6 +91,8 @@ namespace aspnetapp.Controllers
                     Log.Info($"Request text: {requestText}");
                     return StatusCode(400);
                 }
+
+                Log.Debug(lecturer.ToString());
 
                 if (!Lecturer.Validate(lecturer))
                     return StatusCode(400);
