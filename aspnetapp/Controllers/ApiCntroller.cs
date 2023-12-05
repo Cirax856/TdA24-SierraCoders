@@ -36,7 +36,7 @@ namespace aspnetapp.Controllers
                     return StatusCode(400);
                 }
 
-                if (!Lecturer.IsValid(lecturer))
+                if (!Lecturer.Validate(lecturer))
                     return StatusCode(400);
 
                 Database.AddLectuer(lecturer);
@@ -90,7 +90,7 @@ namespace aspnetapp.Controllers
                     return StatusCode(400);
                 }
 
-                if (!Lecturer.IsValid(lecturer))
+                if (!Lecturer.Validate(lecturer))
                     return StatusCode(400);
 
                 if (Database.ContainsKey(guid)) {

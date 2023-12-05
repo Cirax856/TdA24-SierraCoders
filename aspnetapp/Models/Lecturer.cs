@@ -33,8 +33,11 @@ namespace aspnetapp.Models
         public uint? price_per_hour { get; set; }
         public Contact contact { get; set; }
 
-        public static bool IsValid(Lecturer lecturer)
+        public static bool Validate(Lecturer lecturer)
         {
+            if (lecturer.UUID == default)
+                lecturer.UUID = lecturer.DisplayName.GetHash();
+
             if (lecturer.tags == null)
                 lecturer.tags = new Tag[0];
 
