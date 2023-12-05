@@ -14,6 +14,9 @@ namespace aspnetapp
         public static void AddLectuer(Lecturer lecturer)
             => lectuerers.Add(lecturer.UUID, lecturer);
 
+        public static Lecturer GetLecturer(Guid uuid)
+            => lectuerers[uuid];
+
         public static bool TryGetLecturer(Guid uuid, out Lecturer lecturer)
             => lectuerers.TryGetValue(uuid, out lecturer);
 

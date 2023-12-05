@@ -33,6 +33,27 @@ namespace aspnetapp.Models
         public uint? price_per_hour { get; set; }
         public Contact contact { get; set; }
 
+        /// <summary>
+        /// Applies non null values of lecturer and returns the result
+        /// </summary>
+        public Lecturer Apply(Lecturer lecturer)
+            => new Lecturer()
+            {
+                UUID = lecturer.UUID,
+                title_before = lecturer.title_before == null ? this.title_before : lecturer.title_before,
+                first_name = lecturer.first_name,
+                middle_name = lecturer.middle_name == null ? this.middle_name : lecturer.middle_name,
+                last_name = lecturer.last_name,
+                title_after = lecturer.title_after == null ? this.title_after : lecturer.title_after,
+                picture_url = lecturer.picture_url == null ? this.picture_url : lecturer.picture_url,
+                location = lecturer.location == null ? this.location : lecturer.location,
+                claim = lecturer.claim == null ? this.claim : lecturer.claim,
+                bio = lecturer.bio == null ? this.bio : lecturer.bio,
+                tags = lecturer.tags == null ? this.tags : lecturer.tags,
+                price_per_hour = lecturer.price_per_hour.HasValue ? lecturer.price_per_hour : this.price_per_hour,
+                contact = lecturer.contact == null ? this.contact : lecturer.contact,
+            };
+
         public static bool Validate(Lecturer lecturer)
         {
             if (lecturer.UUID == default)
