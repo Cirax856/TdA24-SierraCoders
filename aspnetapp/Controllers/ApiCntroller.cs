@@ -10,7 +10,6 @@ namespace aspnetapp.Controllers
     [Route("api/lecturers")]
     public class LecturersController : Controller
     {
-        private LecturerContext context => Program.dbContext;
         public LecturersController()
         {
         }
@@ -40,8 +39,7 @@ namespace aspnetapp.Controllers
                 if (!Lecturer.IsValid(lecturer))
                     return StatusCode(400);
 
-                context.lecturers.Add(lecturer);
-                context.SaveChanges();
+                Database.AddLectuer(lecturer);
 
                 return Json(lecturer);
             } catch (Exception ex)
@@ -55,9 +53,7 @@ namespace aspnetapp.Controllers
         public ActionResult Get()
         {
             Log.Request(Request);
-            DbLecturer[] _lectures = context.lecturers.ToArray();
-
-            return Json(_lectures.Select(lecturer => (Lecturer)lecturer).ToArray());
+            return Json(Database.lectuerers.Select(item => item.Value).ToArray());
         }
 
         [HttpGet]
@@ -65,12 +61,10 @@ namespace aspnetapp.Controllers
         public ActionResult SpecificGet(Guid guid)
         {
             Log.Request(Request);
-            DbLecturer[] lecturers = context.lecturers.ToArray();
-            for (int i = 0; i < lecturers.Length; i++)
-                if (lecturers[i].UUID == guid)
-                    return Json(lecturers[i]);
-
-            return StatusCode(404);
+            if (Database.TryGetLecturer(guid, out Lecturer lecturer))
+                return Json(lecturer);
+            else
+                return StatusCode(404);
         }
 
         [HttpPut]
@@ -99,17 +93,13 @@ namespace aspnetapp.Controllers
                 if (!Lecturer.IsValid(lecturer))
                     return StatusCode(400);
 
-                DbLecturer[] lecturers = context.lecturers.ToArray();
-                for (int i = 0; i < lecturers.Length; i++)
-                    if (lecturers[i].UUID == guid)
-                    {
-                        context.lecturers.Remove(lecturers[i]);
-                        context.lecturers.Add(lecturer);
-                        context.SaveChanges();
-                        JsonResult res = Json(lecturers[i]);
-                        res.StatusCode = 204;
-                        return res;
-                    }
+                if (Database.ContainsKey(guid)) {
+                    Database.Remove(guid);
+                    Database.AddLectuer(lecturer);
+                    JsonResult res = Json(lecturer);
+                    res.StatusCode = 204;
+                    return res;
+                }
 
                 return StatusCode(404);
             }
@@ -125,14 +115,11 @@ namespace aspnetapp.Controllers
         public ActionResult Delete(Guid guid)
         {
             Log.Request(Request);
-            DbLecturer[] lecturers = context.lecturers.ToArray();
-            for (int i = 0; i < lecturers.Length; i++)
-                if (lecturers[i].UUID == guid)
-                {
-                    context.lecturers.Remove(lecturers[i]);
-                    context.SaveChanges();
-                    return StatusCode(204);
-                }
+            if (Database.lectuerers.ContainsKey(guid))
+            {
+                Database.Remove(guid);
+                return StatusCode(204);
+            }
 
             return StatusCode(404);
         }

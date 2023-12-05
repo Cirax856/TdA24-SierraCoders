@@ -4,14 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace aspnetapp {
     static class Program {
-        internal static LecturerContext dbContext;
-
         static void Main(string[] args)
         {
-            DbContextOptionsBuilder<LecturerContext> dbOptionsBuilder = new DbContextOptionsBuilder<LecturerContext>();
-            dbOptionsBuilder.UseInMemoryDatabase("LecturerList");
-            dbContext = new LecturerContext(dbOptionsBuilder.Options);
-
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -52,7 +46,6 @@ namespace aspnetapp {
         }
     }
 
-    [JsonSerializable(typeof(EnvironmentInfo))]
     [JsonSerializable(typeof(Operation))]
     internal partial class AppJsonSerializerContext : JsonSerializerContext
     {
