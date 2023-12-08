@@ -68,10 +68,10 @@ namespace aspnetapp.Controllers
         public ActionResult SpecificGet(Guid guid)
         {
             Log.Request(Request);
-            if (Database.TryGetLecturer(guid, out Lecturer lecturer))
+            if (Database.TryGetLecturer(guid, out DbLecturer lecturer))
             {
                 Log.Debug("200 OK");
-                return Json(lecturer);
+                return Json((Lecturer)lecturer);
             }
             else
             {
