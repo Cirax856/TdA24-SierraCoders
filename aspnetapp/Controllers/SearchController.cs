@@ -12,7 +12,7 @@ namespace aspnetapp.Controllers
         {
             try
             {
-                Lecturer[] lecturers = Database.lectuerers.Select(item => item.Value).ToArray();
+                Lecturer[] lecturers = Database.lectuerers.Select(item => (Lecturer)item.Value).ToArray();
 
                 if (Request.Query.ContainsKey("name"))
                 {
