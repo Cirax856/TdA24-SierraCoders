@@ -60,7 +60,7 @@ namespace aspnetapp.Controllers
         public ActionResult Get()
         {
             Log.Request(Request);
-            return Json(Database.lectuerers.Select(item => item.Value).ToArray());
+            return Json(Database.lectuerers.Select(item => (Lecturer)item.Value).ToArray());
         }
 
         [HttpGet]
@@ -68,10 +68,10 @@ namespace aspnetapp.Controllers
         public ActionResult SpecificGet(Guid guid)
         {
             Log.Request(Request);
-            if (Database.TryGetLecturer(guid, out DbLecturer lecturer))
+            if (Database.TryGetLecturer(guid, out Lecturer lecturer))
             {
                 Log.Debug("200 OK");
-                return Json((Lecturer)lecturer);
+                return Json(lecturer);
             }
             else
             {

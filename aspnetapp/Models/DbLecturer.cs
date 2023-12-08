@@ -94,5 +94,19 @@ namespace aspnetapp.Models
                 emails = split[1].Split(',', StringSplitOptions.RemoveEmptyEntries),
             };
         }
+
+        public static bool operator ==(DbLecturer a, DbLecturer b)
+            => a.Equals(b);
+        public static bool operator !=(DbLecturer a, DbLecturer b)
+            => !a.Equals(b);
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is null) return false;
+            else if (obj is DbLecturer other) return UUID == other.UUID;
+            else return false;
+        }
+
+        public override int GetHashCode() => UUID.GetHashCode();
     }
 }
