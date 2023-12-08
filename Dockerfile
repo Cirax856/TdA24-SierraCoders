@@ -17,6 +17,7 @@ RUN dotnet publish -a $TARGETARCH --no-restore -o /app
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=build /app .
+RUN touch database.db
 USER $APP_UID
 ENTRYPOINT ["./aspnetapp"]
 EXPOSE 80/tcp
