@@ -2,7 +2,7 @@
 @using aspnetapp.Models
 @model aspnetapp.Pages.lecturerModel
 @{
-	ViewBag.Title = "Lecturer";
+	ViewBag.Title = Model.lecturer.DisplayName;
 }
 
 <!DOCTYPE html>
@@ -11,39 +11,64 @@
 	<title>@ViewBag.Title</title>
 </head>
 <body>
-	<p>Name: @Model.lecturer.DisplayName</p>
-	<img alt="Profile picture" src=@Model.lecturer.picture_url>
-	<p>Location: @Model.lecturer.location</p>
-	<p>Claim: @Model.lecturer.claim</p>
-	<span>Bio: @Html.Raw(Model.lecturer.bio)</span>
-	<p>
-		Tags: @{
-			foreach (Lecturer.Tag tag in Model.lecturer.tags)
-			{
-				<a>@tag.name;</a>
-			}
-		}
-	</p>
-	<p>Price per hour: @Model.lecturer.price_per_hour</p>
-	<div>
-		<p>Telephone Number(s):</p>
-		<ul>
-			@{
-				foreach (string number in Model.lecturer.contact.telephone_numbers)
-				{
-					<li>@number</li>
+	<div class="title">
+		<img alt="Profile picture" src=@Model.lecturer.picture_url class="profile_picture">
+		<div class="name_location">
+			<h1 class="name">@Model.lecturer.DisplayName</h1>
+			<div class="location">
+				<img src="images/pin.png" alt="Pin icon" class="pin" />
+				<p>@Model.lecturer.location</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="info">
+		<div class="info_item">
+			<h1>Claim</h1>
+			<p>@Model.lecturer.claim</p>
+			<h1>Cena na hodinu</h1>
+			<p>@Model.lecturer.price_per_hour Kč</p>
+		</div>
+		<div class="info_item">
+			<h1>Bio</h1>
+			<p>@Html.Raw(Model.lecturer.bio)</p>
+		</div>
+		<div class="info_item">
+			<h1>Tags</h1>
+			<div class="tags">
+				Tags: @{
+					foreach (Lecturer.Tag tag in Model.lecturer.tags)
+					{
+						<a>@tag.name;</a>
+					}
 				}
-			}
-		</ul>
-		<p>Email(s):</p>
-		<ul>
-			@{
-				foreach (string email in Model.lecturer.contact.emails)
-				{
-					<li>@email</li>
-				}
-			}
-		</ul>
+			</div>
+		</div>
+		<div class="info_item">
+			<h1>Contact</h1>
+			<p>Telephone Number(s):</p>
+			<div style="padding-left: 2em;">
+				<ul>
+					@{
+						foreach (string number in Model.lecturer.contact.telephone_numbers)
+						{
+							<li>@number</li>
+						}
+					}
+				</ul>
+			</div>
+			<p>E-mail(s):</p>
+			<div style="padding-left: 2em;">
+				<ul>
+					@{
+						foreach (string email in Model.lecturer.contact.emails)
+						{
+							<li>@email</li>
+						}
+					}
+				</ul>
+			</div>
+		</div>
 	</div>
 </body>
 </html>
