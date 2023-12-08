@@ -126,17 +126,17 @@ namespace aspnetapp
                 ";
 
                 command.Parameters.AddWithValue("@UUID", lecturer.UUID.ToString());
-                command.Parameters.AddWithValue("@title_before", lecturer.title_before);
+                command.Parameters.AddWithValue("@title_before", lecturer.title_before == null ? DBNull.Value : lecturer.title_before);
                 command.Parameters.AddWithValue("@first_name", lecturer.first_name);
-                command.Parameters.AddWithValue("@middle_name", lecturer.middle_name);
+                command.Parameters.AddWithValue("@middle_name", lecturer.middle_name == null ? DBNull.Value : lecturer.middle_name);
                 command.Parameters.AddWithValue("@last_name", lecturer.last_name);
-                command.Parameters.AddWithValue("@title_after", lecturer.title_after);
-                command.Parameters.AddWithValue("@picture_url", lecturer.picture_url);
-                command.Parameters.AddWithValue("@location", lecturer.location);
-                command.Parameters.AddWithValue("@claim", lecturer.claim);
-                command.Parameters.AddWithValue("@bio", lecturer.bio);
+                command.Parameters.AddWithValue("@title_after", lecturer.title_after == null ? DBNull.Value : lecturer.title_after);
+                command.Parameters.AddWithValue("@picture_url", lecturer.picture_url == null ? DBNull.Value : lecturer.picture_url);
+                command.Parameters.AddWithValue("@location", lecturer.location == null ? DBNull.Value : lecturer.location);
+                command.Parameters.AddWithValue("@claim", lecturer.claim == null ? DBNull.Value : lecturer.claim);
+                command.Parameters.AddWithValue("@bio", lecturer.bio == null ? DBNull.Value : lecturer.bio);
                 command.Parameters.AddWithValue("@tags", lecturer.tags);
-                command.Parameters.AddWithValue("@price_per_hour", lecturer.price_per_hour);
+                command.Parameters.AddWithValue("@price_per_hour", lecturer.price_per_hour.HasValue ? lecturer.price_per_hour : DBNull.Value);
                 command.Parameters.AddWithValue("@contact", lecturer.contact);
 
                 command.ExecuteNonQuery();
