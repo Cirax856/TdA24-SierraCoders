@@ -6,6 +6,8 @@ namespace aspnetapp {
     static class Program {
         static void Main(string[] args)
         {
+            Database.Init();
+
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
