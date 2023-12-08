@@ -109,7 +109,7 @@ namespace aspnetapp
             connection.Dispose();
         }
 
-        public static void AddLectuer(DbLecturer lecturer)
+        public static void AddLectuer(Lecturer lecturer)
         {
             runCommand(command =>
             {
@@ -144,11 +144,15 @@ namespace aspnetapp
             lectuerers.Add(lecturer.UUID, lecturer);
         }
 
-        public static DbLecturer GetLecturer(Guid uuid)
+        public static Lecturer GetLecturer(Guid uuid)
             => lectuerers[uuid];
 
-        public static bool TryGetLecturer(Guid uuid, out DbLecturer lecturer)
-            => lectuerers.TryGetValue(uuid, out lecturer);
+        public static bool TryGetLecturer(Guid uuid, out Lecturer lecturer)
+        {
+            bool val = lectuerers.TryGetValue(uuid, out DbLecturer _lecturer);
+            lecturer = _lecturer;
+            return val;
+        }
 
         public static bool ContainsKey(Guid uuid)
             => lectuerers.ContainsKey(uuid);
