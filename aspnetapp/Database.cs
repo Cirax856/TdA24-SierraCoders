@@ -109,7 +109,7 @@ namespace aspnetapp
             connection.Dispose();
         }
 
-        public static void AddLectuer(Lecturer lecturer)
+        public static void AddLectuer(DbLecturer lecturer)
         {
             runCommand(command =>
             {
