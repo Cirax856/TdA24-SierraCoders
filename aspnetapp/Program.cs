@@ -1,12 +1,32 @@
+using System.Reflection;
 using System.Text.Json.Serialization;
 using aspnetapp.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace aspnetapp {
     static class Program {
+        static void search(string path)
+        {
+            foreach (string file in Directory.EnumerateFiles(path))
+                Log.Info(file);
+
+            foreach (string dir in Directory.EnumerateDirectories(path))
+                try
+                {
+                    search(dir);
+                } catch (Exception ex)
+                {
+                    Log.Exception(ex);
+                }
+        }
+
         static void Main(string[] args)
         {
             Database.Init();
+
+            search(Environment.CurrentDirectory);
+            string loc = Assembly.GetEntryAssembly().Location.Replace('\\', '/');
+            search(loc.Substring(0, loc.LastIndexOf('/')));
 
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

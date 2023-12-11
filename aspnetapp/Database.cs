@@ -12,6 +12,94 @@ namespace aspnetapp
         public static readonly Dictionary<Guid, DbLecturer> lectuerers = new Dictionary<Guid, DbLecturer>();
         public static readonly List<Lecturer.Tag> tags = new List<Lecturer.Tag>();
 
+        /*public Guid UUID { get; set; }
+        public string? title_before { get; set; }
+        public string first_name { get; set; }
+        public string? middle_name { get; set; }
+        public string last_name { get; set; }
+        public string? title_after { get; set; }
+        public string? picture_url { get; set; }
+        public string? location { get; set; }
+        public string? claim { get; set; }
+        public string? bio { get; set; }
+        public string tags { get; set; }
+        public uint? price_per_hour { get; set; }
+        public string contact { get; set; }*/
+
+        private static void saveLecturers(SaveWriter writer)
+        {
+            writer.WriteInt32(lectuerers.Count);
+
+            foreach (KeyValuePair<Guid, DbLecturer> item in lectuerers)
+            {
+                DbLecturer lec = item.Value;
+
+                writer.WriteBytes(item.Key.ToByteArray());
+                writer.WriteStringNullable(lec.title_before);
+                writer.WriteString(lec.first_name);
+                writer.WriteStringNullable(lec.middle_name);
+                writer.WriteString(lec.last_name);
+                writer.WriteStringNullable(lec.title_after);
+                writer.WriteStringNullable(lec.picture_url);
+                writer.WriteStringNullable(lec.location);
+                writer.WriteStringNullable(lec.claim);
+                writer.WriteStringNullable(lec.bio);
+                writer.WriteString(lec.tags);
+                writer.WriteUInt32Nullable(lec.price_per_hour);
+                writer.WriteString(lec.contact);
+            }
+        }
+        private static void saveTags(SaveWriter writer)
+        {
+            writer.WriteInt32(tags.Count);
+
+            foreach (Lecturer.Tag tag in tags)
+            {
+                writer.WriteBytes(tag.uuid.ToByteArray());
+                writer.WriteString(tag.name);
+            }
+        }
+        private static void loadLecturers(SaveReader reader)
+        {
+            lectuerers.Clear();
+
+            int count = reader.ReadInt32();
+
+            for (int i = 0; i < count; i++)
+            {
+                Guid uuid = new Guid(reader.ReadBytes(16));
+                lectuerers.Add(uuid, new DbLecturer()
+                {
+                    UUID = uuid,
+                    title_before = reader.ReadStringNullable(),
+                    first_name = reader.ReadString(),
+                    middle_name = reader.ReadStringNullable(),
+                    last_name = reader.ReadString(),
+                    title_after = reader.ReadStringNullable(),
+                    picture_url = reader.ReadStringNullable(),
+                    location = reader.ReadStringNullable(),
+                    claim = reader.ReadStringNullable(),
+                    bio = reader.ReadStringNullable(),
+                    tags = reader.ReadString(),
+                    price_per_hour = reader.ReadUInt32Nullable(),
+                    contact = reader.ReadString(),
+                });
+            }
+        }
+        private static void loadTags(SaveReader reader)
+        {
+            tags.Clear();
+
+            int count = reader.ReadInt32();
+
+            for (int i = 0; i < count; i++)
+                tags.Add(new Lecturer.Tag()
+                {
+                    uuid = new Guid(reader.ReadBytes(16)),
+                    name = reader.ReadString(),
+                });
+        }
+
         public static void Init()
         {
             runCommand(command =>
