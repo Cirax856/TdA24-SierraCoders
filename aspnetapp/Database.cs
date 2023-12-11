@@ -1,5 +1,4 @@
 ﻿using aspnetapp.Models;
-using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,22 +8,32 @@ namespace aspnetapp
 {
     public static class Database
     {
+        private static readonly string SavePath = Path.Combine(Environment.CurrentDirectory, "app/database.save");
+
         public static readonly Dictionary<Guid, DbLecturer> lectuerers = new Dictionary<Guid, DbLecturer>();
         public static readonly List<Lecturer.Tag> tags = new List<Lecturer.Tag>();
 
-        /*public Guid UUID { get; set; }
-        public string? title_before { get; set; }
-        public string first_name { get; set; }
-        public string? middle_name { get; set; }
-        public string last_name { get; set; }
-        public string? title_after { get; set; }
-        public string? picture_url { get; set; }
-        public string? location { get; set; }
-        public string? claim { get; set; }
-        public string? bio { get; set; }
-        public string tags { get; set; }
-        public uint? price_per_hour { get; set; }
-        public string contact { get; set; }*/
+        public static void Init()
+        {
+            if (!File.Exists(SavePath) || File.ReadAllBytes(SavePath).Length < 1)
+                save();
+
+            using (SaveReader reader = new SaveReader(SavePath))
+            {
+                loadLecturers(reader);
+                loadTags(reader);
+            }
+        }
+
+        private static void save()
+        {
+            using (SaveWriter writer = new SaveWriter(SavePath, true))
+            {
+                saveLecturers(writer);
+                saveTags(writer);
+                writer.Flush();
+            }
+        }
 
         private static void saveLecturers(SaveWriter writer)
         {
@@ -100,11 +109,46 @@ namespace aspnetapp
                 });
         }
 
-        public static void Init()
+        public static void AddLectuer(DbLecturer lecturer)
+        {
+            lectuerers.Add(lecturer.UUID, lecturer);
+            save();
+        }
+
+        public static Lecturer GetLecturer(Guid uuid)
+            => lectuerers[uuid];
+
+        public static bool TryGetLecturer(Guid uuid, out Lecturer lecturer)
+        {
+            bool val = lectuerers.TryGetValue(uuid, out DbLecturer _lecturer);
+            lecturer = _lecturer;
+            return val;
+        }
+
+        public static bool ContainsKey(Guid uuid)
+            => lectuerers.ContainsKey(uuid);
+
+        public static bool Remove(Guid uuid)
+        {
+            bool val = lectuerers.Remove(uuid);
+            save();
+            return val;
+        }
+
+        public static void AddTag(Lecturer.Tag tag)
+        {
+            tags.Add(tag);
+            save();
+        }
+
+        public static bool ContainsTag(Lecturer.Tag tag)
+            => tags.Contains(tag);
+
+        /*public static void Init()
         {
             runCommand(command =>
-            {
-                command.CommandText = @"
+                {
+                    command.CommandText = @"
                     CREATE TABLE IF NOT EXISTS Lecturers (
                         UUID TEXT PRIMARY KEY,
                         title_before TEXT,
@@ -121,8 +165,8 @@ namespace aspnetapp
                         contact TEXT
                     );
                 ";
-                command.ExecuteNonQuery();
-            });
+                    command.ExecuteNonQuery();
+                });
             runCommand(command =>
             {
                 command.CommandText = @"
@@ -279,6 +323,6 @@ namespace aspnetapp
         }
 
         public static bool ContainsTag(Lecturer.Tag tag)
-            => tags.Contains(tag);
+            => tags.Contains(tag);*/
     }
 }
