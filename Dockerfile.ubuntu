@@ -18,6 +18,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0-jammy
 WORKDIR /app
 COPY --from=build /app .
 RUN touch database.db
+RUN touch database.save
 USER $APP_UID
 ENTRYPOINT ["./aspnetapp"]
 EXPOSE 80/tcp
