@@ -27,6 +27,7 @@ namespace aspnetapp
 
         private static void save()
         {
+            return; // fuck you
             using (SaveWriter writer = new SaveWriter(SavePath, true))
             {
                 saveLecturers(writer);
