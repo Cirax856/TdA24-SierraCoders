@@ -24,7 +24,7 @@ namespace aspnetapp {
         {
             try
             {
-                Database.Init();
+                //Database.Init();
             } catch (Exception ex)
             {
                 Log.Exception(ex);
