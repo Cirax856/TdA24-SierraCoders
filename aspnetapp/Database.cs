@@ -8,7 +8,7 @@ namespace aspnetapp
 {
     public static class Database
     {
-        private static readonly string SavePath = Path.Combine(Environment.CurrentDirectory, "app/database.save");
+        private static readonly string SavePath = Path.Combine(Environment.CurrentDirectory, "database.save");
 
         public static readonly Dictionary<Guid, DbLecturer> lectuerers = new Dictionary<Guid, DbLecturer>();
         public static readonly List<Lecturer.Tag> tags = new List<Lecturer.Tag>();
