@@ -22,11 +22,23 @@ namespace aspnetapp {
 
         static void Main(string[] args)
         {
-            Database.Init();
+            try
+            {
+                Database.Init();
+            } catch (Exception ex)
+            {
+                Log.Exception(ex);
+            }
 
-            search(Environment.CurrentDirectory);
-            string loc = Assembly.GetEntryAssembly().Location.Replace('\\', '/');
-            search(loc.Substring(0, loc.LastIndexOf('/')));
+            try {
+                search(Environment.CurrentDirectory);
+                string loc = Assembly.GetEntryAssembly().Location.Replace('\\', '/');
+                search(loc.Substring(0, loc.LastIndexOf('/')));
+            }
+            catch (Exception ex)
+            {
+                Log.Exception(ex);
+            }
 
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
