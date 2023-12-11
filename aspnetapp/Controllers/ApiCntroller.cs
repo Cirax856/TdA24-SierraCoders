@@ -60,8 +60,16 @@ namespace aspnetapp.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            Log.Request(Request);
-            return Json(Database.lectuerers.Select(item => (Lecturer)item.Value).ToArray());
+            try
+            {
+                Log.Request(Request);
+                return Json(Database.lectuerers.Select(item => (Lecturer)item.Value).ToArray());
+            } catch (Exception ex)
+            {
+                Log.Error("ERRORRRORORORROROROROR");
+                Log.Exception(ex);
+                return statusWithJson(500); // Internal server error
+            }
         }
 
         [HttpGet]
