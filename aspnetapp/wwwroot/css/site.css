@@ -26,11 +26,18 @@
     color: white;
 }
 
-    .topbar > img {
+    .topbar > a {
         height: 90%;
         width: auto;
-        padding: 0 10px;
+        display: flex;
+        align-items: center;
     }
+
+        .topbar > a > img {
+            height: 90%;
+            width: auto;
+            padding: 0 10px;
+        }
 
 .title {
     display: flex;
