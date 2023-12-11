@@ -137,16 +137,23 @@ namespace aspnetapp.Controllers
         [Route("{guid}")]
         public ActionResult Delete(Guid guid)
         {
-            Log.Request(Request);
-            if (Database.lectuerers.ContainsKey(guid))
-            {
-                Database.Remove(guid);
-                Log.Debug("204 OK");
-                return statusWithJson(204);
-            }
+            try { 
+                Log.Request(Request);
+                if (Database.lectuerers.ContainsKey(guid))
+                {
+                    Database.Remove(guid);
+                    Log.Debug("204 OK");
+                    return statusWithJson(204);
+                }
 
-            Log.Debug("404 ERROR");
-            return statusWithJson(404);
+                Log.Debug("404 ERROR");
+                return statusWithJson(404);
+            } catch (Exception ex)
+            {
+                Log.Error("ERRORRRORORORROROROROR");
+                Log.Exception(ex);
+                return statusWithJson(500); // Internal server error
+            }
         }
 
         private ActionResult statusWithJson(int statusCode)
