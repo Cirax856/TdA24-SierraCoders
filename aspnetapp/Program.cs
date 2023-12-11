@@ -30,16 +30,6 @@ namespace aspnetapp {
                 Log.Exception(ex);
             }
 
-            try {
-                search(Environment.CurrentDirectory);
-                string loc = Assembly.GetEntryAssembly().Location.Replace('\\', '/');
-                search(loc.Substring(0, loc.LastIndexOf('/')));
-            }
-            catch (Exception ex)
-            {
-                Log.Exception(ex);
-            }
-
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
