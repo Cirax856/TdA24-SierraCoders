@@ -51,7 +51,6 @@ namespace aspnetapp.Controllers
                 return Json(lecturer);
             } catch (Exception ex)
             {
-                Log.Error("ERRORRRORORORROROROROR");
                 Log.Exception(ex);
                 return statusWithJson(500); // Internal server error
             }
@@ -66,7 +65,6 @@ namespace aspnetapp.Controllers
                 return Json(Database.lectuerers.Select(item => (Lecturer)item.Value).ToArray());
             } catch (Exception ex)
             {
-                Log.Error("ERRORRRORORORROROROROR");
                 Log.Exception(ex);
                 return statusWithJson(500); // Internal server error
             }
@@ -135,7 +133,6 @@ namespace aspnetapp.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("ERRORRRORORORROROROROR");
                 Log.Exception(ex);
                 return statusWithJson(500); // Internal server error
             }
@@ -158,7 +155,6 @@ namespace aspnetapp.Controllers
                 return statusWithJson(404);
             } catch (Exception ex)
             {
-                Log.Error("ERRORRRORORORROROROROR");
                 Log.Exception(ex);
                 return statusWithJson(500); // Internal server error
             }

@@ -5,20 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace aspnetapp {
     static class Program {
-        static void search(string path)
-        {
-            foreach (string file in Directory.EnumerateFiles(path))
-                Log.Info(file);
-
-            foreach (string dir in Directory.EnumerateDirectories(path))
-                try
-                {
-                    search(dir);
-                } catch (Exception ex)
-                {
-                    Log.Exception(ex);
-                }
-        }
 
         static void Main(string[] args)
         {
@@ -29,6 +15,27 @@ namespace aspnetapp {
             {
                 Log.Exception(ex);
             }
+
+            /*List<string> inputs = new List<string>();
+            
+            do
+            {
+                Console.Write("List entry: ");
+                inputs.Add(Console.ReadLine());
+            } while (!string.IsNullOrWhiteSpace(inputs[inputs.Count - 1]));
+
+            inputs.RemoveAt(inputs.Count - 1);
+
+            Console.Write("Search query: ");
+            string input = Console.ReadLine();
+
+            Searcher.RatedString[] results = Searcher.Search(inputs.ToArray(), s => s, input);
+
+            Console.WriteLine("Results:");
+            for (int i = 0; i < results.Length; i++)
+                Console.WriteLine(results[i]);
+
+            Console.ReadKey(true);*/
 
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

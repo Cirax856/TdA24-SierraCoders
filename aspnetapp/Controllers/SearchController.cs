@@ -39,7 +39,6 @@ namespace aspnetapp.Controllers
                 return Json(lecturers);
             } catch (Exception ex)
             {
-                Log.Error("ERRORRRORORORROROROROR");
                 Console.WriteLine(ex);
                 return StatusCode(500); // Internal server error
             }
