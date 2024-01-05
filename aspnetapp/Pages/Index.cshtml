@@ -1,2 +1,25 @@
 ﻿@page
+@using aspnetapp.Models;
 @model IndexModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>@ViewBag.Title</title>
+</head>
+<body>
+	<div class="lecturerSearchList">
+		<ul>
+			@{
+				var lecturers = Database.lectuerers.ToArray();
+				Searcher.RatedString[] result = Searcher.Search(Database.lectuerers.ToArray(), lecturer => ((Lecturer)lecturer.Value).DisplayName, "").Take(10).ToArray();
+
+				for (int i = 0; i < result.Length; i++)
+				{
+					<li>@((Lecturer)lecturers[result[0].OgIndex].Value).DisplayName</li>
+				}
+			}
+		</ul>
+	</div>
+</body>
+</html>
