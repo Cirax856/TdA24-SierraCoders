@@ -3,6 +3,7 @@ using System.Text.Json;
 using aspnetapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Primitives;
 
 namespace aspnetapp.Pages
 {
@@ -12,16 +13,13 @@ namespace aspnetapp.Pages
 
         public IActionResult OnGet()
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            string resourceName = "aspnetapp.lecturer.json";
-
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
+            if (Request.Query.TryGetValue("id", out StringValues values) && Guid.TryParse(values.FirstOrDefault(), out Guid id) && Database.ContainsKey(id))
             {
-                lecturer = JsonSerializer.Deserialize<Lecturer>(reader.ReadToEnd());
+                lecturer = Database.GetLecturer(id);
+                return Page();
             }
-            
-            return Page();
+            else
+                return StatusCode(404);
         }
     }
 }
