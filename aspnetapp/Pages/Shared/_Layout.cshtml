@@ -5,12 +5,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>@ViewData["Title"]</title>
 	<link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+	<link rel="icon" href="/images/logo.png" />
 </head>
 <body>
 	<div class="topbar">
 		<a href="/"><img src="images/logo.png" /></a>
         <form action="/">
-            <input name="lecName" type="search" minlength="1" maxlength="40" />
+            <input placeholder="Input name…" name="lecName" type="search" minlength="1" maxlength="40" />
             <input type="submit" value="Search" />
         </form>
 	</div>
