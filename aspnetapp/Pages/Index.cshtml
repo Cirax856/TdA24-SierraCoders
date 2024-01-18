@@ -10,15 +10,12 @@
 <body>
 	<div class="lecturerSearchList">
 		@{
-			var lecturers = Database.lectuerers.ToArray();
-			Searcher.RatedString[] result = Searcher.Search(Database.lectuerers.ToArray(), lecturer => ((Lecturer)lecturer.Value).DisplayName, "").Take(10).ToArray();
-
-			for (int i = 0; i < result.Length; i++)
+			for (int i = 0; i < Model.result.Length; i++)
 			{
-				Lecturer lecturer = lecturers[result[i].OgIndex].Value;
+				Lecturer lecturer = Model.lecturers[Model.result[i].OgIndex].Value;
 				<div class="card">
-					<img src=@lecturer.picture_url alt="Profilový obrázek" />
-					<div class="cardItem"><p class="displayName">@lecturer.DisplayName</p></div>
+                    <img src=@lecturer.picture_url alt="Profilový obrázek" onclick="location.href = '/lecturer?id=@lecturer.UUID'" />
+                    <div class="cardItem"><a class="displayName" href="/lecturer?id=@lecturer.UUID">@lecturer.DisplayName</a></div>
 					<div class="cardItem locationContainer">
 						<span><img src="images/pin.png" alt="Pin icon" class="pin" />@lecturer.location</span>
 						<ul class="tagContainer">

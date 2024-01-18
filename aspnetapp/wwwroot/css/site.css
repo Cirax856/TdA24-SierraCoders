@@ -109,6 +109,8 @@
 
     .card > div > .displayName {
         font-size: 300%;
+        text-decoration: none;
+        color: white;
     }
 
     .card > .cardItem {
