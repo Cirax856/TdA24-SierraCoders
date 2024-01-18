@@ -16,6 +16,7 @@ namespace aspnetapp {
                 Log.Exception(ex);
             }
 
+<<<<<<< HEAD
             Database.AddLectuer(new Lecturer()
             {
                 UUID = Guid.NewGuid(),
@@ -46,6 +47,29 @@ namespace aspnetapp {
             Database.tags.Add(new Lecturer.Tag() { uuid = Guid.NewGuid(), name = "Tag01" });
             Database.tags.Add(new Lecturer.Tag() { uuid = Guid.NewGuid(), name = "Tag02" });
             Database.tags.Add(new Lecturer.Tag() { uuid = Guid.NewGuid(), name = "Tag03" });
+
+=======
+>>>>>>> e3112ebf9924b5cd20f949de485dc67b795b409f
+            /*List<string> inputs = new List<string>();
+            
+            do
+            {
+                Console.Write("List entry: ");
+                inputs.Add(Console.ReadLine());
+            } while (!string.IsNullOrWhiteSpace(inputs[inputs.Count - 1]));
+
+            inputs.RemoveAt(inputs.Count - 1);
+
+            Console.Write("Search query: ");
+            string input = Console.ReadLine();
+
+            Searcher.RatedString[] results = Searcher.Search(inputs.ToArray(), s => s, input);
+
+            Console.WriteLine("Results:");
+            for (int i = 0; i < results.Length; i++)
+                Console.WriteLine(results[i]);
+
+            Console.ReadKey(true);*/
 
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
