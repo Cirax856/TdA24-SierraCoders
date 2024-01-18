@@ -23,8 +23,6 @@ public class IndexModel : PageModel
         if (Request.Query.TryGetValue("lecName", out StringValues _searchQuery))
             searchQuery = _searchQuery.ToString().ToLowerInvariant();
 
-        Console.WriteLine("Query: " + searchQuery);
-
         lecturers = Database.lectuerers.ToArray();
         result = Searcher.Search(Database.lectuerers.ToArray(), lecturer => ((Lecturer)lecturer.Value).DisplayName.ToLowerInvariant(), searchQuery).ToArray();
 
