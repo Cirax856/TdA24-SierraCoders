@@ -40,6 +40,42 @@
             padding: 0 10px;
         }
 
+    .topbar > form > input {
+        outline: none;
+        background-color: #74C7D3;
+        border: none;
+        height: 2rem;
+        border-radius: 6px;
+    }
+
+        .topbar > form > input:nth-child(1) {
+            padding-left: .5rem;
+        }
+
+        .topbar > form > input::-ms-clear {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        .topbar > form > input::-ms-reveal {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        .topbar > form > input::-webkit-search-decoration,
+        .topbar > form > input::-webkit-search-cancel-button,
+        .topbar > form > input::-webkit-search-results-button,
+        .topbar > form > input::-webkit-search-results-decoration {
+            display: none;
+        }
+
+        .topbar > form > input:nth-child(2) {
+            width: 5rem;
+            cursor: pointer;
+        }
+
 .title {
     display: flex;
     align-items: center;
@@ -94,6 +130,7 @@
     background-color: #00384D;
     border-radius: 1rem;
     padding: .5rem;
+    margin-bottom: 1rem;
     color: white;
     display: grid;
     grid-template-columns: 9rem auto;
