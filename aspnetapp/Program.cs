@@ -19,8 +19,8 @@ namespace aspnetapp {
             Database.AddLectuer(new Lecturer()
             {
                 UUID = Guid.NewGuid(),
-                first_name = "A",
-                last_name = "B",
+                first_name = "AA",
+                last_name = "BB",
                 location = "C",
                 picture_url = "https://th.bing.com/th/id/OIP.tITS7zP_lmwIVB21WfF9WgAAAA?rs=1&pid=ImgDetMain",
                 tags = new Lecturer.Tag[]
@@ -42,6 +42,32 @@ namespace aspnetapp {
                     telephone_numbers = new string[0]
                 }
             }) ;
+            Database.AddLectuer(new Lecturer()
+            {
+                UUID = Guid.NewGuid(),
+                first_name = "CC",
+                last_name = "DD",
+                location = "E",
+                picture_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Wikipe-tan_full_length.png/330px-Wikipe-tan_full_length.png",
+                tags = new Lecturer.Tag[]
+               {
+                    new Lecturer.Tag()
+                    {
+                        uuid = Guid.NewGuid(),
+                        name = "tag"
+                    },
+                    new Lecturer.Tag()
+                    {
+                        uuid = Guid.NewGuid(),
+                        name = "cooltag"
+                    }
+               },
+                contact = new Lecturer.Contact()
+                {
+                    emails = new string[0],
+                    telephone_numbers = new string[0]
+                }
+            });
 
             /*List<string> inputs = new List<string>();
             

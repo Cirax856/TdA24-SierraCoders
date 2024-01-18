@@ -68,7 +68,8 @@
                 Score = _score;
             }
 
-            public int CompareTo(RatedString other) => Score.CompareTo(other.Score);
+            public int CompareTo(RatedString other)
+                => -Score.CompareTo(other.Score);
 
             public override string ToString()
                 => "{Value: " + Value + ", Score: " + Score + "}";
