@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using aspnetapp.Models
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
@@ -11,6 +12,15 @@
 	<div class="topbar">
 		<a href="/"><img src="images/logo.png" /></a>
         <form action="/">
+            @{
+                foreach (Lecturer.Tag tag in Database.tags)
+                {
+                    <span>
+                        <label>@tag.name</label>
+                        <input name="tag" type="checkbox" value="@tag.name" />
+                    </span>
+                }
+            }
             <input placeholder="Input name…" name="lecName" type="search" minlength="1" maxlength="40" />
             <input type="submit" value="Search" />
         </form>
