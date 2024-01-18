@@ -21,14 +21,15 @@ namespace aspnetapp {
                 UUID = Guid.NewGuid(),
                 first_name = "AA",
                 last_name = "BB",
-                location = "C",
+                location = "Cool location",
                 picture_url = "https://th.bing.com/th/id/OIP.tITS7zP_lmwIVB21WfF9WgAAAA?rs=1&pid=ImgDetMain",
+                price_per_hour = 1500,
                 tags = new Lecturer.Tag[]
                 {
                     new Lecturer.Tag()
                     {
                         uuid = Guid.NewGuid(),
-                        name = "tag"
+                        name = "Tag02"
                     },
                     new Lecturer.Tag()
                     {
@@ -41,33 +42,10 @@ namespace aspnetapp {
                     emails = new string[0],
                     telephone_numbers = new string[0]
                 }
-            }) ;
-            Database.AddLectuer(new Lecturer()
-            {
-                UUID = Guid.NewGuid(),
-                first_name = "CC",
-                last_name = "DD",
-                location = "E",
-                picture_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Wikipe-tan_full_length.png/330px-Wikipe-tan_full_length.png",
-                tags = new Lecturer.Tag[]
-               {
-                    new Lecturer.Tag()
-                    {
-                        uuid = Guid.NewGuid(),
-                        name = "tag"
-                    },
-                    new Lecturer.Tag()
-                    {
-                        uuid = Guid.NewGuid(),
-                        name = "cooltag"
-                    }
-               },
-                contact = new Lecturer.Contact()
-                {
-                    emails = new string[0],
-                    telephone_numbers = new string[0]
-                }
             });
+            Database.tags.Add(new Lecturer.Tag() { uuid = Guid.NewGuid(), name = "Tag01" });
+            Database.tags.Add(new Lecturer.Tag() { uuid = Guid.NewGuid(), name = "Tag02" });
+            Database.tags.Add(new Lecturer.Tag() { uuid = Guid.NewGuid(), name = "Tag03" });
 
             /*List<string> inputs = new List<string>();
             
