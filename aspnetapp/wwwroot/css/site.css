@@ -44,6 +44,9 @@
         margin-left: 1rem;
         display: flex;
         align-items: center;
+        position: absolute;
+        overflow: visible;
+        right: 1rem;
     }
 
 .nameInput {
