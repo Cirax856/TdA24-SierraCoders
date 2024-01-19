@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using aspnetapp.Models;
@@ -10,18 +11,12 @@ namespace aspnetapp
 
 		static void Main(string[] args)
 		{
-			try
-			{
-				//Database.Init();
-			}
-			catch (Exception ex)
-			{
-				Log.Exception(ex);
-			}
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("cs-cz", false);
 
-			Database.AddLectuer(new Lecturer()
+
+            Database.AddLectuer(new Lecturer()
 			{
-				UUID = Guid.NewGuid(),
+				UUID = Guid.Parse("8ccba44b-35a9-4d5c-be65-d9fcdf915bbc"),
 				first_name = "Cirax",
 				last_name = "856",
 				picture_url = "https://static-cdn.jtvnw.net/jtv_user_pictures/49e9609d-80a0-46f6-ba33-857c3f2fb113-profile_image-300x300.png",
@@ -32,7 +27,7 @@ namespace aspnetapp
 				{
 					new Lecturer.Tag()
 					{
-						uuid = Guid.NewGuid(),
+						uuid = "Frontend".GetHash(),
 						name = "Frontend"
 					}
 				},
@@ -46,7 +41,7 @@ namespace aspnetapp
 
 			Database.AddLectuer(new Lecturer()
 			{
-				UUID = Guid.NewGuid(),
+				UUID = Guid.Parse("6c16b31e-e348-4ba6-8d57-0548c7cee41f"),
 				first_name = "Bit",
 				last_name = "Coder",
 				picture_url = "https://i.ibb.co/Z8T6pcb/Capture.png",
@@ -57,8 +52,8 @@ namespace aspnetapp
 				{
 					new Lecturer.Tag()
 					{
-						uuid = Guid.NewGuid(),
-						name = "Backend"
+						uuid = "Backend".GetHash(),
+                        name = "Backend"
 					}
 				},
 				price_per_hour = 650,
@@ -71,7 +66,7 @@ namespace aspnetapp
 
 			Database.AddLectuer(new Lecturer()
 			{
-				UUID = Guid.NewGuid(),
+				UUID = Guid.Parse("ef793831-5bd7-4e72-ab23-08e14d97e60a"),
 				first_name = "P4ULIE",
 				last_name = "",
 				picture_url = "https://cdn.discordapp.com/avatars/487850221997522954/859f86040a70f34f43b3cb083e095774.webp?size=640",
@@ -82,7 +77,7 @@ namespace aspnetapp
 				{
 					new Lecturer.Tag()
 					{
-						uuid = Guid.NewGuid(),
+						uuid = "CTF".GetHash(),
 						name = "CTF"
 					}
 				},
@@ -98,7 +93,7 @@ namespace aspnetapp
 
 			for (int i = 0; i < tags.Length; i++)
 			{
-				Database.tags.Add(new Lecturer.Tag() { uuid = Guid.NewGuid(), name = tags[i] });
+				Database.tags.Add(new Lecturer.Tag() { uuid = tags[i].GetHash(), name = tags[i] });
 			}
 
 			WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
