@@ -26,7 +26,7 @@
 		<div class="info_item">
 			<h1>Claim</h1>
 			<p>@Model.lecturer.claim</p>
-			<h1>Cena na hodinu</h1>
+			<h1>Price per hour</h1>
 			<p>@Model.lecturer.price_per_hour Kč</p>
 		</div>
 		<div class="info_item">
@@ -36,11 +36,15 @@
 		<div class="info_item">
 			<h1>Tags</h1>
 			<div class="tags">
-				Tags: @{
+				@{
+					List<string> tags = new List<string>();
+
 					foreach (Lecturer.Tag tag in Model.lecturer.tags)
 					{
-						<a>@tag.name;</a>
+						tags.Add(@tag.name);
 					}
+
+					<p>@string.Join(", ", tags)</p>
 				}
 			</div>
 		</div>
