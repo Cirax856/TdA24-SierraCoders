@@ -41,8 +41,7 @@
         }
 
     .topbar > form {
-        position: absolute;
-        right: 1rem;
+        margin-left: 1rem;
     }
 
     .topbar > form > input {
@@ -55,25 +54,6 @@
 
         .topbar > form > input:nth-child(1) {
             padding-left: .5rem;
-        }
-
-        .topbar > form > input::-ms-clear {
-            display: none;
-            width: 0;
-            height: 0;
-        }
-
-        .topbar > form > input::-ms-reveal {
-            display: none;
-            width: 0;
-            height: 0;
-        }
-
-        .topbar > form > input::-webkit-search-decoration,
-        .topbar > form > input::-webkit-search-cancel-button,
-        .topbar > form > input::-webkit-search-results-button,
-        .topbar > form > input::-webkit-search-results-decoration {
-            display: none;
         }
 
         .topbar > form > input:nth-child(2) {
@@ -176,6 +156,24 @@
 
 .tagContainer {
     display: inline;
+}
+
+.dropdownContainer {
+    position: absolute;
+    display: none;
+    background-color: #74C7D3;
+    padding: 1rem;
+    border: 1px solid #00384D;
+    border-radius: 6px;
+}
+
+input[type=checkbox] {
+    width: 1rem;
+    height: 1rem;
+}
+
+.show {
+    display: block;
 }
 
 .tag {
