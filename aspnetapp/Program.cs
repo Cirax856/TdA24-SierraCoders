@@ -43,7 +43,7 @@ namespace aspnetapp {
                     telephone_numbers = new string[0]
                 }
             });
-            Database.tags.Add(new Lecturer.Tag() { uuid = Guid.NewGuid(), name = "Tag01" });
+            Database.tags.Add(new Lecturer.Tag() { uuid = Guid.NewGuid(), name = "Tag01AAAAAAAAAAAAAAAAAAAAAAAAAAAA" });
             Database.tags.Add(new Lecturer.Tag() { uuid = Guid.NewGuid(), name = "Tag02" });
             Database.tags.Add(new Lecturer.Tag() { uuid = Guid.NewGuid(), name = "Tag03" });
 

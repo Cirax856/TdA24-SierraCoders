@@ -11,22 +11,40 @@
 <body>
 	<div class="topbar">
 		<a href="/"><img src="images/logo.png" /></a>
-        <form action="/">
-            @{
-                foreach (Lecturer.Tag tag in Database.tags)
-                {
-                    <span>
-                        <label>@tag.name</label>
-                        <input name="tag" type="checkbox" value="@tag.name" />
-                    </span>
-                }
-            }
-            <input placeholder="Input name…" name="lecName" type="search" minlength="1" maxlength="40" />
-            <input type="submit" value="Search" />
-        </form>
+		<form action="/">
+			<img src="images/plus.png" onclick="dropdownClick()" style="position: relative; cursor: pointer; height: 3rem; margin-right: 1rem;" />
+			<div class="dropdownContainer">
+				<ul class="dropdownTags">
+					<li>LOCATION:</li>
+					<li><input placeholder="Input location…" name="location" type="text" minlength="0" maxlength="40" class="nameInput" /></li>
+					<li>PRICE:</li>
+					<li><input placeholder="Input minimum price…" name="minPrice" type="number" class="nameInput" /></li>
+					<li><input placeholder="Input maximum price…" name="maxPrice" type="number" class="nameInput" /></li>
+					<li>TAGS:</li>
+					@{
+						foreach (Lecturer.Tag tag in Database.tags)
+						{
+							<li>
+								<input name="tag" type="checkbox" value="@tag.name" />
+								<label>@tag.name</label>
+							</li>
+						}
+					}
+				</ul>
+			</div>
+			<input placeholder="Input name…" name="lecName" type="search" minlength="0" maxlength="40" class="nameInput2" />
+			<input type="submit" value="Search" class="submitInput" />
+		</form>
 	</div>
 	<div class="container">
-			@RenderBody()
+		@RenderBody()
 	</div>
+	<script>
+		const dropdown = document.querySelectorAll(".dropdownContainer")[0];
+
+		function dropdownClick() {
+			dropdown.classList.toggle("show");
+		}
+	</script>
 </body>
 </html>
