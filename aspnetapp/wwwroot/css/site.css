@@ -119,9 +119,14 @@
     margin: 1em;
     border-radius: 6px;
     color: white;
-    padding: 2em;
+    padding-left: 2rem;
+    padding-top: 1rem;
     font-size: 1vw;
 }
+
+    .info_item > h1 {
+        padding: 1rem 0;
+    }
 
 .container {
     overflow-x: hidden;
@@ -146,6 +151,8 @@
         height: 9rem;
         margin: 0 1rem;
         grid-row-end: span 2;
+        border-radius: 1rem;
+        border: 2px solid black;
     }
 
     .card > div > .displayName {
@@ -164,9 +171,13 @@
         width: 100%;
         height: 100%;
         display: grid;
-        grid-template-rows: 50% 50%;
+        grid-template-rows: 33% 33% 33%;
         grid-template-columns: 100%;
     }
+
+        .card > .locationContainer > p {
+            padding-left: .2rem;
+        }
 
         .card > .locationContainer > span > img {
             width: 15px;
@@ -198,8 +209,6 @@ input[type=checkbox] {
 }
 
 .tag {
-    border: 5px solid #202020;
-    width: auto;
     display: inline;
     padding: .2rem;
 }
