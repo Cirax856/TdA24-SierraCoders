@@ -17,8 +17,9 @@ public class IndexModel : PageModel
         _logger = logger;
     }
 
-    public void OnGet()
+    public ActionResult OnGet()
     {
+        // name
         string searchQuery = string.Empty;
         if (Request.Query.TryGetValue("lecName", out StringValues _searchQuery))
             searchQuery = _searchQuery.ToString().ToLowerInvariant();
@@ -27,7 +28,7 @@ public class IndexModel : PageModel
         result = Searcher.Search(Database.lectuerers.ToArray(), lecturer => ((Lecturer)lecturer.Value).DisplayName.ToLowerInvariant(), searchQuery).ToList();
 
         if (result.Count == 0)
-            return;
+            return Page();
 
         // remove entries with score lower than or equal to 0
         int i;
@@ -37,6 +38,32 @@ public class IndexModel : PageModel
 
         result = result.Take(i).ToList();
 
+        // price
+        int minPrice = int.MinValue;
+        int maxPrice = int.MaxValue;
+        if (Request.Query.TryGetValue("minPrice", out StringValues _minPrice))
+            if (!int.TryParse(_minPrice.ToString(), out minPrice))
+                minPrice = int.MinValue;
+        if (Request.Query.TryGetValue("maxPrice", out StringValues _maxPrice))
+            if (!int.TryParse(_maxPrice.ToString(), out maxPrice))
+                maxPrice = int.MaxValue;
+
+        // location
+        string location = string.Empty;
+        if (Request.Query.TryGetValue("location", out StringValues _location))
+            location = _location.ToString().ToLowerInvariant();
+
+        for (i = 0; i < result.Count; i++)
+        {
+            Lecturer lec = lecturers[result[i].OgIndex].Value;
+            if (lec.price_per_hour < minPrice || lec.price_per_hour > maxPrice || (location != string.Empty && Searcher.Rate(lec.location.ToLowerInvariant(), 0, location).Score < 0f))
+            {
+                result.RemoveAt(i);
+                i--;
+            }
+        }
+
+        // tags
         string[] tags = new string[0];
         if (Request.Query.TryGetValue("tag", out StringValues _tags))
             tags = _tags.ToArray();
@@ -57,5 +84,7 @@ public class IndexModel : PageModel
                 i--;
             }
         }
+
+        return Page();
     }
 }
