@@ -17,7 +17,7 @@
                     <img src=@lecturer.picture_url alt="Profilový obrázek" onclick="location.href = '/lecturer?id=@lecturer.UUID'" />
                     <div class="cardItem"><a class="displayName" href="/lecturer?id=@lecturer.UUID">@lecturer.DisplayName</a></div>
                     <div class="cardItem locationContainer">
-                        <span><img src="images/pin.png" alt="Pin icon" class="pin" />@lecturer.location</span>
+                        <span><img src="images/pin.png" alt="Pin icon" class="pin" />@Html.Raw(lecturer.location)</span>
                         <p>@lecturer.claim | @lecturer.price_per_hour Kč za hodinu</p>
                         <ul class="tagContainer">
                             <li class="tag">Tagy:</li>
