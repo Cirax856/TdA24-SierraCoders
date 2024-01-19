@@ -12,14 +12,14 @@
 	<div class="topbar">
 		<a href="/"><img src="images/logo.png" /></a>
 		<form action="/">
-			<button type="button" onclick="dropdownClick()" style="position: relative;">+</button>
+			<img src="images/plus.png" onclick="dropdownClick()" style="position: relative; cursor: pointer; height: 3rem; margin-right: 1rem;" />
 			<div class="dropdownContainer">
 				<ul class="dropdownTags">
 					<li>LOCATION:</li>
-					<li><input placeholder="Input location…" name="location" type="text" minlength="0" maxlength="40" /></li>
+					<li><input placeholder="Input location…" name="location" type="text" minlength="0" maxlength="40" class="nameInput" /></li>
 					<li>PRICE:</li>
-					<li><input placeholder="Input minimum price…" name="minPrice" type="number" /></li>
-					<li><input placeholder="Input maximum price…" name="maxPrice" type="number" /></li>
+					<li><input placeholder="Input minimum price…" name="minPrice" type="number" class="nameInput" /></li>
+					<li><input placeholder="Input maximum price…" name="maxPrice" type="number" class="nameInput" /></li>
 					<li>TAGS:</li>
 					@{
 						foreach (Lecturer.Tag tag in Database.tags)
@@ -32,8 +32,8 @@
 					}
 				</ul>
 			</div>
-			<input placeholder="Input name…" name="lecName" type="search" minlength="0" maxlength="40" />
-			<input type="submit" value="Search" />
+			<input placeholder="Input name…" name="lecName" type="search" minlength="0" maxlength="40" class="nameInput2" />
+			<input type="submit" value="Search" class="submitInput" />
 		</form>
 	</div>
 	<div class="container">
