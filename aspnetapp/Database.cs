@@ -15,7 +15,7 @@ namespace aspnetapp
         public static readonly List<Lecturer.Tag> tags = new List<Lecturer.Tag>();
 
         public static void AddLectuer(Lecturer lecturer)
-            => lectuerers.Add(lecturer.UUID, lecturer);
+            => lectuerers[lecturer.UUID] = lecturer;
 
         public static Lecturer GetLecturer(Guid uuid)
             => lectuerers[uuid];
