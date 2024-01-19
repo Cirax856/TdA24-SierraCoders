@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using aspnetapp.Models;
@@ -45,7 +45,7 @@ namespace aspnetapp
 				first_name = "Bit",
 				last_name = "Coder",
 				picture_url = "https://i.ibb.co/Z8T6pcb/Capture.png",
-				location = "Hodon�n",
+				location = "Hodonín",
 				claim = "Student",
 				bio = "<p><span style=\"color: green;\">Backend developer</span> a student.</p>",
 				tags = new Lecturer.Tag[]
@@ -70,7 +70,7 @@ namespace aspnetapp
 				first_name = "P4ULIE",
 				last_name = "",
 				picture_url = "https://cdn.discordapp.com/avatars/487850221997522954/859f86040a70f34f43b3cb083e095774.webp?size=640",
-				location = "",
+				location = "Víťův sklep",
 				claim = "Student",
 				bio = "<p><span style=\"color: darkblue;\">CTF Master</span> a student.</p>",
 				tags = new Lecturer.Tag[]
