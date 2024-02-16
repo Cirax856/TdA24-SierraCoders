@@ -3,19 +3,26 @@
 @{
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>@ViewBag.Title</title>
-</head>
 <body>
     <form>
         <label for="username">Username:</label>
-        <input name="username" type="text" minlength="4" maxlength="30" />
+        <input name="username" type="text" value="@Model.Username" minlength="4" maxlength="30" /><br />
+        <label for="email">Email:</label>
+        <input name="email" type="email" value="@Model.Email" minlength="4" maxlength="60" /><br />
         <label for="password">Password:</label>
-        <input name="password" type="password" minlength="8" maxlength="30" />
+        <input name="password" type="password" value="@Model.Password" minlength="8" maxlength="60" /><br />
         <label for="password2">Confirm Password:</label>
-        <input name="password2" type="password" minlength="8" maxlength="30" />
+        <input name="password2" type="password" value="@Model.Password2" minlength="8" maxlength="60" /><br />
+        <input type="submit" value="Register" />
     </form>
+    @{
+        if (!string.IsNullOrWhiteSpace(Model.Error))
+        {
+            <script>
+                setTimeout(() => {
+                    alert("Error: @Model.Error");
+                }, "250");
+            </script>
+        }
+    }
 </body>
-</html>
