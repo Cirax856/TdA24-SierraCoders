@@ -38,7 +38,7 @@ namespace aspnetapp.Pages.Account
                 else if (Password != Password2)
                     return Redirect(getUrl("Passwords must match"));
 
-                return Redirect("success");
+                return Redirect($"success?email={Email}");
 
                 string getUrl(string error)
                 {
