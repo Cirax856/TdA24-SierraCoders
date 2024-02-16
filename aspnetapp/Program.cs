@@ -1,7 +1,9 @@
 ﻿using System.Globalization;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using aspnetapp.Auth;
 using aspnetapp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace aspnetapp
@@ -18,8 +20,9 @@ namespace aspnetapp
 			builder.Services.AddRazorPages();
 			builder.Services.AddHealthChecks();
 			builder.Services.AddControllers();
+            builder.Services.AddSingleton<IAuthorizationHandler, LoggedInAuthorizationHandler>();
 
-			WebApplication app = builder.Build();
+            WebApplication app = builder.Build();
 
 			app.MapHealthChecks("/health");
 

@@ -24,7 +24,6 @@ namespace aspnetapp.Auth
             // policies(and requirements/handlers) are in use.
             _logger.LogWarning("Evaluating authorization");
 
-            // Check the user's age.
             Claim authenticationClaim = context.User.FindFirst(c => c.Type == ClaimTypes.Authentication);
             if (authenticationClaim != null)
             {
