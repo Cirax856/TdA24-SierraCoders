@@ -1,3 +1,4 @@
+using aspnetapp.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Primitives;
@@ -22,23 +23,19 @@ namespace aspnetapp.Pages.Account
                 Password = _password;
             if (Request.Query.TryGetValue("password2", out StringValues _password2))
                 Password2 = _password2;
+            else
+                Password2 = "";
 
             if (Request.Query.TryGetValue("error", out StringValues _error))
             {
                 Error = _error;
             }
-            else if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Password2))
+            else if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password))
             {
-                if (!Utils.Verify(Username, "Username", out string error, 4, 30))
+                if (!AcountManager.TryCreateAcount(Username, Email, Password, Password2, out string error))
                     return Redirect(getUrl(error));
-                else if (!Utils.Verify(Email, "Email", out error, 4, 60, 1))
-                    return Redirect(getUrl(error));
-                else if (!Utils.Verify(Password, "Password", out error, 8, 60))
-                    return Redirect(getUrl(error));
-                else if (Password != Password2)
-                    return Redirect(getUrl("Passwords must match"));
-
-                return Redirect($"success?email={Email}");
+                else
+                    return Redirect($"success?email={Email}");
 
                 string getUrl(string error)
                 {

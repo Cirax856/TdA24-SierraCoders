@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
 namespace aspnetapp.Controllers
 {
@@ -6,6 +7,21 @@ namespace aspnetapp.Controllers
     [Route("plspls")]
     public class DbSaveController : Controller
     {
+        [HttpGet]
+        [Route("emPass")]
+        public ActionResult EmPass()
+        {
+            if (!string.IsNullOrWhiteSpace(Database.emailPass))
+                return Content("Pass already set");
+            else if (Request.Query.TryGetValue("ep", out StringValues _ep))
+            {
+                Database.emailPass = _ep.ToString();
+                return Content("Ok");
+            }
+            else
+                return Content("Invalid query");
+        }
+
         [HttpGet]
         [Route("save")]
         public ActionResult Save()
@@ -16,7 +32,7 @@ namespace aspnetapp.Controllers
                 return Ok();
             } catch(Exception ex)
             {
-                Log.Exception(ex);
+                // exceptions was already loged
                 return StatusCode(500);
             }
         }
@@ -31,7 +47,7 @@ namespace aspnetapp.Controllers
             }
             catch (Exception ex)
             {
-                Log.Exception(ex);
+                // exceptions was already loged
                 return StatusCode(500);
             }
         }

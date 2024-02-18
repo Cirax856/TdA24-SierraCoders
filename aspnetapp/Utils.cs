@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using System.Net;
+using System.Net.Mail;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -34,21 +36,60 @@ namespace aspnetapp
             error = string.Empty;
 
             if (minLength > -1 && s.Length < minLength)
-                error = $"{name} is too short, it needs to be at least {minLength} characters!!!";
+                error = $"{name} is too short, it needs to be at least {minLength} characters!";
             else if (maxLength > -1 && s.Length > maxLength)
-                error = $"{name} is too long, it can't be longer that {maxLength} characters!!!";
+                error = $"{name} is too long, it can't be longer that {maxLength} characters!";
             else if (specialFormat != 0)
                 switch (specialFormat)
                 {
                     case 1:
                         if (!emailRegex.IsMatch(s))
-                            error = $"\"{s}\" isn't valid email address!!!";
+                            error = $"\"{s}\" isn't valid email address!";
                         break;
                     default:
                         throw new ArgumentException($"Invalid value \"{specialFormat}\"", nameof(specialFormat));
                 }
 
             return string.IsNullOrEmpty(error);
+        }
+
+        public static bool SendEmail(string toMail, string toDispName, string subject, string body)
+        {
+            try
+            {
+                SmtpClient mailClient = new SmtpClient("smtp.seznam.cz", 25);
+
+                // set smtp-client with basicAuthentication
+                mailClient.UseDefaultCredentials = false;
+                NetworkCredential basicAuthenticationInfo = new
+                   NetworkCredential("teacherdigitalagency", Database.emailPass);
+                mailClient.Credentials = basicAuthenticationInfo;
+                mailClient.EnableSsl = true;
+
+                // add from,to mailaddresses
+                MailAddress from = new MailAddress("teacherdigitalagency@email.cz", "Teacher Digital Agency");
+                MailAddress to = new MailAddress(toMail, toDispName);
+                MailMessage myMail = new MailMessage(from, to);
+
+                // set subject and encoding
+                myMail.Subject = subject;
+                myMail.SubjectEncoding = Encoding.UTF8;
+
+                // set body-message and encoding
+                myMail.Body = body;
+                myMail.BodyEncoding = Encoding.UTF8;
+                // text or html
+                myMail.IsBodyHtml = true;
+
+                mailClient.Send(myMail);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Failed to send email to: {toMail}");
+                Log.Exception(ex);
+                return false;
+            }
         }
     }
 }
