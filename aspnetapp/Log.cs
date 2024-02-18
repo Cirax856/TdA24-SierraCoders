@@ -12,9 +12,12 @@ namespace aspnetapp
         {
             LogMessage log = new LogMessage(level, message);
             messages.Add(log);
+
             builder.Append($"[{log.Level}]".PadRight(12, ' '))
                 .Append($"[{log.Time.ToString("G")}] ") // https://learn.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings#GeneralDateLongTime
                 .AppendLine(message);
+
+            Console.WriteLine($"[{log.Level}]".PadRight(12, ' ') + $"[{log.Time.ToString("G")}] {message}");
         }
         public static void Debug(string message)
             => log(message, LogLevel.Debug);
