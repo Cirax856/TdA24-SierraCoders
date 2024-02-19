@@ -11,6 +11,18 @@
 </head>
 <body>
 	<div class="topbar">
+		<div class="selected">HOME</div>
+		<div>LECTURERS</div>
+		<div>SIGN IN</div>
+	</div>
+	<div class="content">
+		@RenderBody()
+	</div>
+	<div class="footer">
+
+	</div>
+
+	@* <div class="topbar">
 		<a href="/"><img src="/images/logo.png" /></a>
 		<form action="/">
 			<img src="/images/plus.png" onclick="dropdownClick()" style="position: relative; cursor: pointer; height: 3rem; margin-right: 1rem;" />
@@ -61,6 +73,6 @@
 		function dropdownClick() {
 			dropdown.classList.toggle("show");
 		}
-	</script>
+	</script> *@
 </body>
 </html>
