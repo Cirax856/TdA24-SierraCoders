@@ -14,13 +14,14 @@ namespace aspnetapp
 		{
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("cs-cz", false);
 
+			Database.Load();
+
 			WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
 			builder.Services.AddRazorPages();
 			builder.Services.AddHealthChecks();
 			builder.Services.AddControllers();
-            builder.Services.AddSingleton<IAuthorizationHandler, LoggedInAuthorizationHandler>();
 
             WebApplication app = builder.Build();
 

@@ -11,9 +11,20 @@
 </head>
 <body>
 	<div class="topbar">
-		<div class="selected">HOME</div>
-		<div>LECTURERS</div>
-		<div>SIGN IN</div>
+		<div id="topHomeDiv"><a href="/" class="stylessLink">HOME</a></div>
+		<div id="topLecturersDiv"><a href="/lecturers" class="stylessLink">LECTURERS</a></div>
+		<div id="topSignInDiv">
+			@{
+				if (Context.Request.Cookies.TryGetValue("session", out string session) && AccountManager.TryGetAcount(session, out Acount acount))
+				{
+					<a href="/account" style="font-size:20px" class="stylessLink">@acount.Username</a>
+					<a href="/account/logout" style="font-size:20px" class="stylessLink">Log out</a>
+				} else
+				{
+					<a href="/account/login" class="stylessLink">SIGN IN</a>
+				}
+			}
+			</div>
 	</div>
 	<div class="content">
 		@RenderBody()

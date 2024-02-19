@@ -62,6 +62,8 @@ namespace aspnetapp
 
                 writer.WriteList(emailVerifications.ToList());
                 writer.Flush();
+
+                Log.Info("Saved database");
             } catch (Exception ex)
             {
                 Log.Error("There was an error saving:");
@@ -81,6 +83,8 @@ namespace aspnetapp
                 emailPass = reader.ReadString();
 
                 emailVerifications = reader.ReadList<KeyValuePair<string, uint>>().ToDictionary(item => item.Key, item => item.Value);
+
+                Log.Info("Loaded database");
             } catch (Exception ex)
             {
                 Log.Error("There was an error loading:");
