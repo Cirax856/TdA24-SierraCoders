@@ -112,6 +112,12 @@ namespace aspnetapp.Auth
             foreach (KeyValuePair<uint, Acount> item in accounts)
                 if (item.Value.Username == username && SecretHasher.Verify(password, item.Value.PasswordHash))
                 {
+                    if (!item.Value.Verified)
+                    {
+                        sessionOrError = "Please verify your email first";
+                        return false;
+                    }
+
                     LoginSession session = LoginSession.Create(item.Key, TimeSpan.FromHours(1));
                     sessions.Add(session);
                     sessionOrError = session.Cookie;
