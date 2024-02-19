@@ -1,5 +1,8 @@
-﻿using System.Net;
-using System.Net.Mail;
+﻿using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
+using MimeKit.Text;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -57,31 +60,27 @@ namespace aspnetapp
         {
             try
             {
-                SmtpClient mailClient = new SmtpClient("smtp.seznam.cz", 25);
+                using (SmtpClient client = new SmtpClient())
+                {
+                    client.Connect("smtp.seznam.cz", 465, SecureSocketOptions.SslOnConnect);
 
-                // set smtp-client with basicAuthentication
-                mailClient.UseDefaultCredentials = false;
-                NetworkCredential basicAuthenticationInfo = new
-                   NetworkCredential("teacherdigitalagency", Database.emailPass);
-                mailClient.Credentials = basicAuthenticationInfo;
-                mailClient.EnableSsl = true;
+                    Log.Debug($"Authenticating mail with username: teacherdigitalagency, Pass: {Database.emailPass.Substring(0, 6)}...");
+                    client.Authenticate("teacherdigitalagency", Database.emailPass);
 
-                // add from,to mailaddresses
-                MailAddress from = new MailAddress("teacherdigitalagency@email.cz", "Teacher Digital Agency");
-                MailAddress to = new MailAddress(toMail, toDispName);
-                MailMessage myMail = new MailMessage(from, to);
+                    MimeMessage email = new MimeMessage();
+                    email.From.Add(new MailboxAddress("Teacher Digital Agency", "teacherdigitalagency@seznam.cz"));
+                    email.To.Add(new MailboxAddress(toDispName, toMail));
 
-                // set subject and encoding
-                myMail.Subject = subject;
-                myMail.SubjectEncoding = Encoding.UTF8;
+                    email.Subject = subject;
+                    email.Body = new TextPart(TextFormat.Html) { Text = body };
 
-                // set body-message and encoding
-                myMail.Body = body;
-                myMail.BodyEncoding = Encoding.UTF8;
-                // text or html
-                myMail.IsBodyHtml = true;
+                    Log.Debug($"Sending auth email to {toMail}");
 
-                mailClient.Send(myMail);
+                    client.Send(email);
+                    Log.Debug("Sent email");
+
+                    client.Disconnect(true);
+                }
                 return true;
             }
             catch (Exception ex)
