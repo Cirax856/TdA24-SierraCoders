@@ -17,7 +17,8 @@ namespace aspnetapp
 
         internal static Dictionary<uint, Acount> acounts = new Dictionary<uint, Acount>();
         internal static List<LoginSession> sessions = new List<LoginSession>();
-
+        internal static Dictionary<string, uint> emailVerifications = new Dictionary<string, uint>();
+            
         internal static string emailPass;
 
         public static void AddLectuer(Lecturer lecturer)
@@ -58,6 +59,8 @@ namespace aspnetapp
                 saveAccounts(writer);
                 saveSessions(writer);
                 writer.WriteString(emailPass);
+
+                writer.WriteList(emailVerifications.ToList());
                 writer.Flush();
             } catch (Exception ex)
             {
@@ -76,6 +79,8 @@ namespace aspnetapp
                 loadAccounts(reader);
                 loadSessions(reader);
                 emailPass = reader.ReadString();
+
+                emailVerifications = reader.ReadList<KeyValuePair<string, uint>>().ToDictionary(item => item.Key, item => item.Value);
             } catch (Exception ex)
             {
                 Log.Error("There was an error loading:");

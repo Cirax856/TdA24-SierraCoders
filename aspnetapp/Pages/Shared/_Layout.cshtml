@@ -1,4 +1,5 @@
 ﻿@using aspnetapp.Models
+@using aspnetapp.Auth
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,6 +36,21 @@
 			<input placeholder="Input name…" name="lecName" type="search" minlength="0" maxlength="40" class="nameInput2" />
 			<input type="submit" value="Search" class="submitInput" />
 		</form>
+		@{
+			if (Context.Request.Cookies.TryGetValue("session", out string session) && AccountManager.TryGetAcount(session, out Acount acount))
+			{
+				<div class="acount">
+					<p>Acount: @acount.Username</p>
+					<a href="/account/logout">Logout</a>
+				</div>
+			}
+			else
+			{
+				<div class="acount">
+					<p>Not logged in</p>
+				</div>
+			}
+		}
 	</div>
 	<div class="container">
 		@RenderBody()

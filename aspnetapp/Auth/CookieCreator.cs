@@ -4,7 +4,8 @@ namespace aspnetapp.Auth
 {
     public static class CookieCreator
     {
-        public const int AcountLength = 40;
+        public const int AcountLength = 50;
+        public const int EmailVerifycationLength = 60;
 
         private static readonly RandomNumberGenerator rng = RandomNumberGenerator.Create();
 
