@@ -32,7 +32,7 @@ namespace aspnetapp.Pages.Account
             }
             else if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password))
             {
-                if (!AcountManager.TryCreateAcount(Username, Email, Password, Password2, out string error))
+                if (!AccountManager.TryCreateAcount(Request.Host.ToString(), Username, Email, Password, Password2, out string error))
                     return Redirect(getUrl(error));
                 else
                     return Redirect($"success?email={Email}");

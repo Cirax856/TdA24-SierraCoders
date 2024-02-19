@@ -4,16 +4,17 @@ using System.Collections.Immutable;
 
 namespace aspnetapp.Auth
 {
-    public static class AcountManager
+    public static class AccountManager
     {
         private static ImmutableArray<char> allowedNameChars;
 
-        private static Dictionary<uint, Acount> acounts => Database.acounts;
+        private static Dictionary<uint, Acount> accounts => Database.acounts;
         private static List<LoginSession> sessions => Database.sessions;
+        private static Dictionary<string, uint> verifications => Database.emailVerifications;
 
-        public static int AcountCount => acounts.Count;
+        public static int AcountCount => accounts.Count;
 
-        static AcountManager()
+        static AccountManager()
         {
             List<char> nameChars = new List<char>();
             // upper case letters
@@ -49,7 +50,7 @@ namespace aspnetapp.Auth
             allowedNameChars = nameChars.ToImmutableArray();
         }
 
-        public static bool TryCreateAcount(string username, string email, string password, string password2, out string error)
+        public static bool TryCreateAcount(string host, string username, string email, string password, string password2, out string error)
         {
             if (!Utils.Verify(username, "Username", out error, 4, 30))
                 return false;
@@ -63,27 +64,52 @@ namespace aspnetapp.Auth
                 return false;
             }
 
-            foreach (KeyValuePair<uint, Acount> item in acounts)
+            uint idToRemove = uint.MaxValue;
+            foreach (KeyValuePair<uint, Acount> item in accounts)
                 if (item.Value.Username == username)
                 {
-                    error = "User with the username already exists!";
-                    return false;
+                    if (!item.Value.Verified && item.Value.TimeCreated.AddMinutes(2) < DateTime.UtcNow)
+                    {
+                        List<string> toRemove = new List<string>();
+                        foreach (var verif in verifications)
+                            if (verif.Value == item.Key)
+                                toRemove.Add(verif.Key);
+
+                        for (int i = 0; i < toRemove.Count; i++)
+                            verifications.Remove(toRemove[i]);
+
+                        idToRemove = item.Key;
+                    }
+                    else
+                    {
+                        error = "User with the username already exists!";
+                        return false;
+                    }
                 }
 
-            if (!Utils.SendEmail(email, username, "Email Verification", "Please client this link to verify your acount: [link]"))
+            if (idToRemove != uint.MaxValue)
+                accounts.Remove(idToRemove);
+
+            string verification = CookieCreator.Crate(CookieCreator.EmailVerifycationLength);
+
+            if (!Utils.SendEmail(email, username, "Email Verification", $"Please client this link to verify your acount: http://{host}/account/verify?id={verification}"))
             {
                 error = "Failed to send confirmation email! Check that the email is valid.";
                 return false;
             }
 
-            acounts.Add((uint)acounts.Count, new Acount(username, email, SecretHasher.Hash(password), new Guid()));
+            lock (accounts)
+            {
+                verifications.Add(verification, (uint)accounts.Count);
+                accounts.Add((uint)accounts.Count, new Acount(username, email, SecretHasher.Hash(password)));
+            }
 
             return true;
         }
 
         public static bool TryLogin(string username, string password, out string sessionOrError)
         {
-            foreach (KeyValuePair<uint, Acount> item in acounts)
+            foreach (KeyValuePair<uint, Acount> item in accounts)
                 if (item.Value.Username == username && SecretHasher.Verify(password, item.Value.PasswordHash))
                 {
                     LoginSession session = LoginSession.Create(item.Key, TimeSpan.FromHours(1));
@@ -113,7 +139,7 @@ namespace aspnetapp.Auth
                 }
                 else if (sessions[i].Cookie == cookie)
                 {
-                    if (acounts.TryGetValue(sessions[i].Acount, out acount))
+                    if (accounts.TryGetValue(sessions[i].Acount, out acount))
                         return true;
                 }
             }

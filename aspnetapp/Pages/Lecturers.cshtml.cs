@@ -5,14 +5,14 @@ using Microsoft.Extensions.Primitives;
 
 namespace aspnetapp.Pages;
 
-public class IndexModel : PageModel
+public class LecturersModel : PageModel
 {
-    private readonly ILogger<IndexModel> _logger;
+    private readonly ILogger<LecturersModel> _logger;
 
     public KeyValuePair<Guid, DbLecturer>[] lecturers { get; private set; }
     public List<Searcher.RatedString> result { get; private set; }
 
-    public IndexModel(ILogger<IndexModel> logger)
+    public LecturersModel(ILogger<LecturersModel> logger)
     {
         _logger = logger;
     }
