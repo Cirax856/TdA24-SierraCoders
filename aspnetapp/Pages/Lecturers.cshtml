@@ -3,7 +3,7 @@
 @model LecturersModel
 
 <body>
-    <script>document.getElementById("topLecturersDiv").className = "selected"</script>
+    <script>document.getElementById("topLecturersDiv").classList.toggle("selected")</script>
     <div class="lecturerSearchList">
         @{
             for (int i = 0; i < Model.result.Count; i++)

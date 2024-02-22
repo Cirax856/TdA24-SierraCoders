@@ -22,17 +22,31 @@ body {
     font-family: 'Lalezar';
 }
 
-    .topbar > div {
+    .topbar > a {
         width: 20%;
         height: 80%;
         background-color: #00384D;
         border-radius: 6px;
         color: white;
-        font-size: 400%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        font-size: 2vw;
+        display: grid;
+        grid-template-columns: 70% 30%;
+        grid-template-rows: 100%;
     }
+
+        .topbar > a > div {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .topbar > a > div > img {
+                width: 90%;
+                height: 90%;
+                padding-right: .2vw;
+            }
 
     .topbar > .selected {
         background-color: #74C7D3;
@@ -46,10 +60,30 @@ body {
 }
 
 .footer {
+    font-family: "Lalezar";
     background-color: #272727;
     width: 100%;
     height: 10%;
+    color: #808080;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
 }
+
+    .footer > a {
+        text-decoration: none;
+        color: #808080;
+    }
+
+    .footer > div {
+        display: flex;
+        align-items: center;
+    }
+
+        .footer > div > svg {
+            margin-right: 1rem;
+        }
 
 .stylessLink {
     text-decoration: none;
