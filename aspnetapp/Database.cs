@@ -73,6 +73,16 @@ namespace aspnetapp
         }
         public static void Load()
         {
+            if (!File.Exists(SavePath)) {
+                lectuerers.Clear();
+                tags.Clear();
+                acounts.Clear();
+                sessions.Clear();
+                emailPass.Clone();
+				emailVerifications.Clear();
+                Save();
+				return;
+            }
             try
             {
                 using SaveReader reader = new SaveReader(SavePath);
