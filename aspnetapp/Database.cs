@@ -78,7 +78,7 @@ namespace aspnetapp
                 tags.Clear();
                 acounts.Clear();
                 sessions.Clear();
-                emailPass.Clone();
+                emailPass = "";
 				emailVerifications.Clear();
                 Save();
 				return;
