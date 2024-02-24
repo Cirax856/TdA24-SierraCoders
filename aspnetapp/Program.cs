@@ -19,7 +19,7 @@ namespace aspnetapp
 				Database.Load();
 			} catch
 			{
-				Console.WriteLine("Failed to load database, it has been backed up and overwritten");
+				Log.Info("Failed to load database, it has been backed up and overwritten");
 				File.Move(Database.SavePath, Path.Combine(Path.GetDirectoryName(Database.SavePath), "backup.save"));
 				File.Delete(Database.SavePath);
 

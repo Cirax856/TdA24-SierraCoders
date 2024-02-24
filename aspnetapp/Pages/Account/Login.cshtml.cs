@@ -5,30 +5,32 @@ using Microsoft.Extensions.Primitives;
 
 namespace aspnetapp.Pages.Account
 {
-    public class LoginModel : PageModel
-    {
-        public string ErrorMesage { get; private set; } = null;
+	public class LoginModel : PageModel
+	{
+		public string ErrorMesage { get; private set; } = null;
 
-        public ActionResult OnGet()
-        {
-            if (Request.Query.TryGetValue("username", out StringValues _username) && Request.Query.TryGetValue("password", out StringValues _password))
-            {
-                if (AccountManager.TryLogin(_username, _password, out string sessionOrError))
-                {
-                    if (Request.Cookies.ContainsKey("session"))
-                        Response.Cookies.Delete("session");
+		public ActionResult OnGet()
+		{
+			if (Request.Query.TryGetValue("error", out StringValues _error))
+				ErrorMesage = _error;
+			else if (Request.Query.TryGetValue("username", out StringValues _username) && Request.Query.TryGetValue("password", out StringValues _password))
+			{
+				if (AccountManager.TryLogin(_username, _password, out string sessionOrError))
+				{
+					if (Request.Cookies.ContainsKey("session"))
+						Response.Cookies.Delete("session");
 
-                    Response.Cookies.Append("session", sessionOrError, new CookieOptions()
-                    {
-                        Expires = new DateTimeOffset(DateTime.UtcNow.AddHours(2d)),
-                    });
+					Response.Cookies.Append("session", sessionOrError, new CookieOptions()
+					{
+						Expires = new DateTimeOffset(DateTime.UtcNow.AddHours(2d)),
+					});
 
-                    return Redirect("/");
-                }
-                else
-                    ErrorMesage = sessionOrError;
-            }
-            return Page();
-        }
-    }
+					return Redirect("/");
+				}
+				else
+					return Redirect("/account/login?error=" + sessionOrError);
+			}
+			return Page();
+		}
+	}
 }
