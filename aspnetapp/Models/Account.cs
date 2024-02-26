@@ -2,7 +2,7 @@
 
 namespace aspnetapp.Models
 {
-    public class Acount : ISaveLoad<Acount>
+    public class Account : ISaveLoad<Account>
     {
         public static string FileName => throw new NotImplementedException();
 
@@ -14,10 +14,12 @@ namespace aspnetapp.Models
         public string PasswordHash;
         public Guid LecturerGuid;
 
-        public Acount(string _username, string _email, string _passwordHash)
+        public bool HasLecturer => LecturerGuid != default;
+
+        public Account(string _username, string _email, string _passwordHash)
             : this(false, DateTime.UtcNow, _username, _email, _passwordHash, default)
         { }
-        public Acount(bool _verified, DateTime _timeCreated, string _username, string _email, string _passwordHash, Guid _lecturerGuid)
+        public Account(bool _verified, DateTime _timeCreated, string _username, string _email, string _passwordHash, Guid _lecturerGuid)
         {
             Verified = _verified;
             TimeCreated = _timeCreated;
@@ -37,7 +39,7 @@ namespace aspnetapp.Models
             writer.WriteGuid(LecturerGuid);
         }
 
-        public static Acount Load(SaveReader reader)
-            => new Acount(reader.ReadBool(), reader.ReadDateTime(), reader.ReadString(), reader.ReadString(), reader.ReadString(), reader.ReadGuid());
+        public static Account Load(SaveReader reader)
+            => new Account(reader.ReadBool(), reader.ReadDateTime(), reader.ReadString(), reader.ReadString(), reader.ReadString(), reader.ReadGuid());
     }
 }

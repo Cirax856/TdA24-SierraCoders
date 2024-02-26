@@ -27,7 +27,7 @@ namespace aspnetapp
 			}
 
 			if (Database.acounts.Count == 0)
-				Database.acounts.Add(0, new Acount(true, DateTime.UtcNow, "BestUser", "realMain@google.com", SecretHasher.Hash("12345678"), new Guid()));
+				Database.acounts.Add(0, new Account(true, DateTime.UtcNow, "BestUser", "realMain@google.com", SecretHasher.Hash("12345678"), new Guid()));
 
 			WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

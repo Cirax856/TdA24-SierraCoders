@@ -34,7 +34,6 @@ namespace aspnetapp.Controllers
                     for (i = 0; i < ratedLecturers.Length; i++)
                         lecturers[i] = _lecturers[ratedLecturers[i].OgIndex].Clone();
                 }
-                // TODO add filtering by price (from - to, ui - double slider?), by tags, by location
 
                 return Json(lecturers);
             } catch (Exception ex)

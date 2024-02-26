@@ -15,7 +15,7 @@
 		<a href="/lecturers" class="stylessLink tab" id="topLecturersDiv"><div><p>LECTURERS</p></div><div><img src="/images/Lecturers Icon.svg" alt="Lecturers Icon" />
 	</div></a>
 		@{
-			if (Context.Request.Cookies.TryGetValue("session", out string session) && AccountManager.TryGetAcount(session, out Acount acount))
+			if (Context.Request.Cookies.TryGetValue("session", out string session) && AccountManager.TryGetAcount(session, out Account acount))
 			{
 				<div class="tab" id="topSignInDiv">
 					<a href="/account" style="font-size: 20px" class="stylessLink"><div><p>@acount.Username</p></div></a>

@@ -84,13 +84,15 @@ namespace aspnetapp.Models
                 Log.Info($"Lecturer isn't valid because at least 1 telephone number is required");
                 return false;
             }
-            lecturer.contact.emails = lecturer.contact.emails.Distinct().ToArray();
+            lecturer.contact.emails = lecturer.contact.emails.Distinct().Select(email => email.Sanitize()).ToArray();
 
-            lecturer.contact.telephone_numbers = lecturer.contact.telephone_numbers.Distinct().ToArray();
+            lecturer.contact.telephone_numbers = lecturer.contact.telephone_numbers.Distinct().Select(phone_number => phone_number.Sanitize()).ToArray();
 
             for (int i = 0; i < lecturer.tags.Length; i++)
             {
                 Tag tag = lecturer.tags[i];
+                tag.name = tag.name.Sanitize();
+
                 if (tag.uuid == default)
                     tag.uuid = tag.name.GetHash();
                 if (!Database.ContainsTag(tag))
@@ -99,6 +101,27 @@ namespace aspnetapp.Models
 
             return true;
         }
+
+        public string TagsToString()
+            => tags is null ? string.Empty : string.Join<Tag>(", ", tags);
+
+        public Lecturer Clone()
+            => new Lecturer()
+            {
+                UUID = this.UUID,
+                title_before = this.title_before,
+                first_name = this.first_name,
+                middle_name = this.middle_name,
+                last_name = this.last_name,
+                title_after = this.title_after,
+                picture_url = this.picture_url,
+                location = this.location,
+                claim = this.claim,
+                bio = this.bio,
+                tags = this.tags.Select(tag => tag.Clone()).ToArray(),
+                price_per_hour = this.price_per_hour,
+                contact = this.contact.Clone(),
+            };
 
         public override string ToString()
             => $"[Guid: {UUID}, Name: {DisplayName}, Picture url: {picture_url}, Location: {location}, Claim: {claim}, Price per hour: {price_per_hour}, Contact: {contact}]";
@@ -113,6 +136,13 @@ namespace aspnetapp.Models
             public static bool operator !=(Tag a, Tag b)
                 => !a.Equals(b);
 
+            public Tag Clone()
+                => new Tag()
+                {
+                    uuid = this.uuid,
+                    name = this.name
+                };
+
             public override bool Equals(object? obj)
             {
                 if (obj is null)
@@ -124,9 +154,12 @@ namespace aspnetapp.Models
             }
 
             public bool Equals(Tag other)
-                => uuid.Equals(other.uuid);
+                => name.Equals(other.name);
 
-            public override int GetHashCode() => uuid.GetHashCode();
+            public override int GetHashCode() => name.GetHashCode();
+
+            public override string ToString()
+                => name;
         }
 
         public class Contact
@@ -134,40 +167,15 @@ namespace aspnetapp.Models
             public string[] telephone_numbers { get; set; }
             public string[] emails { get; set; }
 
-            public override string ToString()
-                => $"[Phone numbers: {string.Join(',', telephone_numbers)}, Emails: {string.Join(',', emails)}]";
-        }
-
-        public Lecturer Clone()
-        {
-            Tag[] tags = new Tag[this.tags.Length];
-            for (int i = 0; i < tags.Length; i++)
-                tags[i] = new Tag()
+            public Contact Clone()
+                => new Contact()
                 {
-                    uuid = this.tags[i].uuid,
-                    name = this.tags[i].name,
+                    telephone_numbers = (string[])this.telephone_numbers.Clone(),
+                    emails = (string[])this.emails.Clone()
                 };
 
-            return new Lecturer()
-            {
-                UUID = this.UUID,
-                title_before = this.title_before,
-                first_name = this.first_name,
-                middle_name = this.middle_name,
-                last_name = this.last_name,
-                title_after = this.title_after,
-                picture_url = this.picture_url,
-                location = this.location,
-                claim = this.claim,
-                bio = this.bio,
-                tags = tags,
-                price_per_hour = this.price_per_hour,
-                contact = new Contact()
-                {
-                    telephone_numbers = this.contact.telephone_numbers,
-                    emails = this.contact.emails
-                }
-            };
+            public override string ToString()
+                => $"[Phone numbers: {string.Join(',', telephone_numbers)}, Emails: {string.Join(',', emails)}]";
         }
     }
 }

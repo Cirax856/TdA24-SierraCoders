@@ -8,7 +8,7 @@ namespace aspnetapp.Auth
     {
         private static ImmutableArray<char> allowedNameChars;
 
-        private static Dictionary<uint, Acount> accounts => Database.acounts;
+        private static Dictionary<uint, Account> accounts => Database.acounts;
         private static List<LoginSession> sessions => Database.sessions;
         private static Dictionary<string, uint> verifications => Database.emailVerifications;
 
@@ -65,7 +65,7 @@ namespace aspnetapp.Auth
             }
 
             uint idToRemove = uint.MaxValue;
-            foreach (KeyValuePair<uint, Acount> item in accounts)
+            foreach (KeyValuePair<uint, Account> item in accounts)
                 if (item.Value.Username == username)
                 {
                     if (!item.Value.Verified && item.Value.TimeCreated.AddMinutes(2) < DateTime.UtcNow)
@@ -101,7 +101,7 @@ namespace aspnetapp.Auth
             lock (accounts)
             {
                 verifications.Add(verification, (uint)accounts.Count);
-                accounts.Add((uint)accounts.Count, new Acount(username, email, SecretHasher.Hash(password)));
+                accounts.Add((uint)accounts.Count, new Account(username, email, SecretHasher.Hash(password)));
             }
 
             return true;
@@ -109,7 +109,7 @@ namespace aspnetapp.Auth
 
         public static bool TryLogin(string username, string password, out string sessionOrError)
         {
-            foreach (KeyValuePair<uint, Acount> item in accounts)
+            foreach (KeyValuePair<uint, Account> item in accounts)
                 if (item.Value.Username == username && SecretHasher.Verify(password, item.Value.PasswordHash))
                 {
                     if (!item.Value.Verified)
@@ -131,7 +131,7 @@ namespace aspnetapp.Auth
         }
 
         public static bool TryGetAcount
-            (string cookie, out Acount acount)
+            (string cookie, out Account acount)
         {
             acount = null;
 

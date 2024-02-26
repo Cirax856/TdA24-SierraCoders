@@ -15,7 +15,7 @@ namespace aspnetapp
         public static readonly Dictionary<Guid, DbLecturer> lectuerers = new Dictionary<Guid, DbLecturer>();
         public static readonly List<Lecturer.Tag> tags = new List<Lecturer.Tag>();
 
-        internal static Dictionary<uint, Acount> acounts = new Dictionary<uint, Acount>();
+        internal static Dictionary<uint, Account> acounts = new Dictionary<uint, Account>();
         internal static List<LoginSession> sessions = new List<LoginSession>();
         internal static Dictionary<string, uint> emailVerifications = new Dictionary<string, uint>();
             
@@ -191,7 +191,7 @@ namespace aspnetapp
             int count = reader.ReadInt32();
 
             for (int i = 0; i < count; i++)
-                acounts.Add(reader.ReadUInt32(), Acount.Load(reader));
+                acounts.Add(reader.ReadUInt32(), Account.Load(reader));
         }
         private static void saveSessions(SaveWriter writer)
         {

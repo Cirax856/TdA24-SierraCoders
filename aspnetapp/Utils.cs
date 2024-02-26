@@ -1,4 +1,5 @@
-﻿using MailKit.Net.Smtp;
+﻿using Ganss.Xss;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 using MimeKit.Text;
@@ -6,6 +7,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace aspnetapp
 {
@@ -89,6 +91,35 @@ namespace aspnetapp
                 Log.Exception(ex);
                 return false;
             }
+        }
+
+        public static string Sanitize(this string s)
+        {
+            if (s == null) return null;
+
+            HtmlSanitizer sanitizer = new HtmlSanitizer();
+
+            sanitizer.AllowedTags.Add("p");
+            sanitizer.AllowedTags.Add("b"); // bold
+            sanitizer.AllowedTags.Add("em"); // italic
+            sanitizer.AllowedTags.Add("i"); // italic
+
+            return sanitizer.Sanitize(s);
+        }
+
+
+        public static void Sanitize(ref string s)
+        {
+            if (s == null) return;
+
+            HtmlSanitizer sanitizer = new HtmlSanitizer();
+
+            sanitizer.AllowedTags.Add("p");
+            sanitizer.AllowedTags.Add("b"); // bold
+            sanitizer.AllowedTags.Add("em"); // italic
+            sanitizer.AllowedTags.Add("i"); // italic
+
+            s = sanitizer.Sanitize(s);
         }
     }
 }

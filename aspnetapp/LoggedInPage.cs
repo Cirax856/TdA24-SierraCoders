@@ -10,7 +10,7 @@ namespace aspnetapp
         public bool logedIn()
             => Request.Cookies.TryGetValue("session", out string session) && AccountManager.TryGetAcount(session, out _);
 
-        public bool tryGetAcount(out Acount acount)
+        public bool tryGetAcount(out Account acount)
         {
             acount = null;
             return Request.Cookies.TryGetValue("session", out string session) && AccountManager.TryGetAcount(session, out acount);
