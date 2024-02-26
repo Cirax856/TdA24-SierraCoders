@@ -10,22 +10,25 @@
             for (int i = 0; i < Model.result.Count; i++)
             {
                 Lecturer lecturer = Model.lecturers[Model.result[i].OgIndex].Value;
-                <div class="card">
-                    <img src=@lecturer.picture_url alt="Profilový obrázek" onclick="location.href = '/lecturer?id=@lecturer.UUID'" />
-                    <div class="cardItem"><a class="displayName" href="/lecturer?id=@lecturer.UUID">@lecturer.DisplayName</a></div>
-                    <div class="cardItem locationContainer">
-                        <span><img src="images/pin.png" alt="Pin icon" class="pin" />@Html.Raw(lecturer.location)</span>
-                        <p>@lecturer.claim | @lecturer.price_per_hour Kč za hodinu</p>
-                        <ul class="tagContainer">
-                            <li class="tag">Tagy:</li>
+                <div class="card" onclick="location.href = '/lecturer?id=@lecturer.UUID'">
+                    <img src=@lecturer.picture_url alt="Profile picture" />
+                    <div>
+                        <p>@lecturer.DisplayName</p>
+                        <div>
+                            <span><img src="images/pin.png" alt="Pin icon" class="pin" />From @Html.Raw(lecturer.location)</span>
+                            <p>@lecturer.price_per_hour Kč per hour</p>
+                        </div>
+                        <ul>
+                            <li>Tagy:</li>
                             @{
                                 for (int j = 0; j < lecturer.tags.Length; j++)
                                 {
-                                    <li class="tag">@lecturer.tags[j].name</li>
+                                    <li>@lecturer.tags[j].name</li>
                                 }
                             }
                         </ul>
                     </div>
+                    <p>@lecturer.claim</p>
                 </div>
             }
         }

@@ -104,3 +104,79 @@ body {
     text-decoration: none;
     color: white;
 }
+
+.lecturerSearchList {
+    width: 100%;
+    height: 80%;
+    overflow-y: auto;
+}
+
+.card {
+    width: calc(100% - 2rem);
+    height: 20rem;
+    background-color: #74C7D3;
+    padding: 1rem;
+    margin: 1rem;
+    display: grid;
+    grid-template-columns: max-content auto;
+    grid-template-rows: max-content auto;
+    cursor: pointer;
+}
+
+    .card > img {
+        width: 18vh;
+        padding: 0 1rem 1rem 0;
+    }
+
+    .card > div {
+        display: grid;
+        grid-template-columns: max-content auto;
+        grid-template-rows: max-content auto;
+        position: relative;
+        font-size: 3vh;
+    }
+
+        .card > div > ul {
+            list-style-type: none;
+            margin-top: 2vh;
+        }
+
+            .card > div > ul > li {
+                float: left;
+                padding-right: 2px;
+            }
+
+        .card > div > p {
+            font-weight: bold;
+        }
+
+        .card > div > div {
+            font-size: 2vh;
+            position: absolute;
+            right: 0;
+        }
+
+            .card > div > div > span > img {
+                width: 2vh;
+            }
+
+        .card > div > ul {
+            grid-column-start: span 2;
+        }
+
+    .card > p {
+        grid-column-start: span 2;
+    }
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #272727;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: none;
+}
