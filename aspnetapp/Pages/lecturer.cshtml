@@ -31,7 +31,7 @@
 		</div>
 		<div class="info_item">
 			<h1>Bio</h1>
-			<p>@Html.Raw(Model.lecturer.bio)</p>
+			<p>@Html.Raw(Model.lecturer.bio?.Sanitize() ?? "")</p>
 		</div>
 		<div class="info_item">
 			<h1>Tags</h1>
