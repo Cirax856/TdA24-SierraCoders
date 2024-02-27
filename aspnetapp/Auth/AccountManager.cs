@@ -8,7 +8,7 @@ namespace aspnetapp.Auth
     {
         private static ImmutableArray<char> allowedNameChars;
 
-        private static Dictionary<uint, Account> accounts => Database.acounts;
+        private static Dictionary<uint, Account> accounts => Database.accounts;
         private static List<LoginSession> sessions => Database.sessions;
         private static Dictionary<string, uint> verifications => Database.emailVerifications;
 
@@ -65,30 +65,35 @@ namespace aspnetapp.Auth
             }
 
             uint idToRemove = uint.MaxValue;
-            foreach (KeyValuePair<uint, Account> item in accounts)
-                if (item.Value.Username == username)
-                {
-                    if (!item.Value.Verified && item.Value.TimeCreated.AddMinutes(2) < DateTime.UtcNow)
+            lock (Database.accounts)
+                foreach (KeyValuePair<uint, Account> item in accounts)
+                    if (item.Value.Username == username)
                     {
-                        List<string> toRemove = new List<string>();
-                        foreach (var verif in verifications)
-                            if (verif.Value == item.Key)
-                                toRemove.Add(verif.Key);
+                        if (!item.Value.Verified && item.Value.TimeCreated.AddMinutes(2) < DateTime.UtcNow)
+                        {
+                            List<string> toRemove = new List<string>();
+                            lock (Database.emailVerifications)
+                            {
+                                foreach (var verif in verifications)
+                                    if (verif.Value == item.Key)
+                                        toRemove.Add(verif.Key);
 
-                        for (int i = 0; i < toRemove.Count; i++)
-                            verifications.Remove(toRemove[i]);
+                                for (int i = 0; i < toRemove.Count; i++)
+                                    verifications.Remove(toRemove[i]);
+                            }
 
-                        idToRemove = item.Key;
+                            idToRemove = item.Key;
+                        }
+                        else
+                        {
+                            error = "User with the username already exists!";
+                            return false;
+                        }
                     }
-                    else
-                    {
-                        error = "User with the username already exists!";
-                        return false;
-                    }
-                }
 
             if (idToRemove != uint.MaxValue)
-                accounts.Remove(idToRemove);
+                lock (Database.accounts)
+                    accounts.Remove(idToRemove);
 
             string verification = CookieCreator.Crate(CookieCreator.EmailVerifycationLength);
 
@@ -100,8 +105,10 @@ namespace aspnetapp.Auth
 
             lock (accounts)
             {
-                verifications.Add(verification, (uint)accounts.Count);
-                accounts.Add((uint)accounts.Count, new Account(username, email, SecretHasher.Hash(password)));
+                lock (Database.emailVerifications)
+                    verifications.Add(verification, (uint)accounts.Count);
+                lock (Database.accounts)
+                    accounts.Add((uint)accounts.Count, new Account(username, email, SecretHasher.Hash(password)));
             }
 
             return true;
@@ -109,21 +116,23 @@ namespace aspnetapp.Auth
 
         public static bool TryLogin(string username, string password, out string sessionOrError)
         {
-            foreach (KeyValuePair<uint, Account> item in accounts)
-                if (item.Value.Username == username && SecretHasher.Verify(password, item.Value.PasswordHash))
-                {
-                    if (!item.Value.Verified)
+            lock (Database.accounts)
+                foreach (KeyValuePair<uint, Account> item in accounts)
+                    if (item.Value.Username == username && SecretHasher.Verify(password, item.Value.PasswordHash))
                     {
-                        sessionOrError = "Please verify your email first";
-                        return false;
+                        if (!item.Value.Verified)
+                        {
+                            sessionOrError = "Please verify your email first";
+                            return false;
+                        }
+
+                        LoginSession session = LoginSession.Create(item.Key, TimeSpan.FromHours(1));
+                        lock (Database.sessions)
+                            sessions.Add(session);
+                        sessionOrError = session.Cookie;
+
+                        return true;
                     }
-
-                    LoginSession session = LoginSession.Create(item.Key, TimeSpan.FromHours(1));
-                    sessions.Add(session);
-                    sessionOrError = session.Cookie;
-
-                    return true;
-                }
 
             sessionOrError = "Acount or password is invalid";
 
@@ -135,20 +144,21 @@ namespace aspnetapp.Auth
         {
             acount = null;
 
-            for (int i = 0; i < sessions.Count; i++)
-            {
-                LoginSession session = sessions[i];
-                if (session.IsExpired)
+            lock (Database.sessions)
+                for (int i = 0; i < sessions.Count; i++)
                 {
-                    sessions.RemoveAt(i);
-                    i--;
+                    LoginSession session = sessions[i];
+                    if (session.IsExpired)
+                    {
+                        sessions.RemoveAt(i);
+                        i--;
+                    }
+                    else if (sessions[i].Cookie == cookie)
+                    {
+                        if (accounts.TryGetValue(sessions[i].Acount, out acount))
+                            return true;
+                    }
                 }
-                else if (sessions[i].Cookie == cookie)
-                {
-                    if (accounts.TryGetValue(sessions[i].Acount, out acount))
-                        return true;
-                }
-            }
 
             return false;
         }

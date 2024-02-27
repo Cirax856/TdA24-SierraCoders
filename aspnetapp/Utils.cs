@@ -107,7 +107,6 @@ namespace aspnetapp
             return sanitizer.Sanitize(s);
         }
 
-
         public static void Sanitize(ref string s)
         {
             if (s == null) return;
@@ -121,5 +120,18 @@ namespace aspnetapp
 
             s = sanitizer.Sanitize(s);
         }
+
+        public static int ToInt(this DayOfWeek value)
+            => value switch
+            {
+                DayOfWeek.Monday =>    0,
+                DayOfWeek.Tuesday =>   1,
+                DayOfWeek.Wednesday => 2,
+                DayOfWeek.Thursday =>  3,
+                DayOfWeek.Friday =>    4,
+                DayOfWeek.Saturday =>  5,
+                DayOfWeek.Sunday =>    6,
+                _ =>                   0
+            };
     }
 }

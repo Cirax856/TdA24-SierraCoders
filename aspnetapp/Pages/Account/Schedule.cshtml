@@ -4,10 +4,23 @@
 }
 
 <body>
-	<form>
-		<label for="repeating" >Repeating:</label>
-		<input type="radio" name="scheduleType" id="repeating" value="repeating"><br />
-		<label for="per_week" >Per week:</label>
-		<input type="radio" name="scheduleType" id="per_week" value="per_week">
-	</form>
+	<a href="/account/schedule/add">Add week preset</a><br />
+	<label for="scheduleDate">Date:</label>
+	<input type="date" id="scheduleDate" value="@Model.ScheduleDate.ToString("yyyy-MM-dd")" onchange="dateChanged(event)">
+	<br />
+
+	<script>
+		var dateSelector;
+
+		function dateChanged(e) {
+			var searchParams = new URLSearchParams(window.location.search);
+			searchParams.set("date", e.target.value);
+			window.location.search = searchParams.toString();
+		}
+
+		document.addEventListener("DOMContentLoaded", function () 
+		{
+			dateSelector = document.getElementById("scheduleDate");
+		});
+	</script>
 </body>

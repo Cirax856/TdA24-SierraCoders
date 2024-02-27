@@ -13,7 +13,7 @@ namespace aspnetapp.Pages
 
         public IActionResult OnGet()
         {
-            if (Request.Query.TryGetValue("id", out StringValues values) && Guid.TryParse(values.FirstOrDefault(), out Guid id) && Database.ContainsKey(id))
+            if (Request.Query.TryGetValue("id", out StringValues values) && Guid.TryParse(values.FirstOrDefault(), out Guid id) && Database.ContainsLecturer(id))
             {
                 lecturer = Database.GetLecturer(id);
                 return Page();

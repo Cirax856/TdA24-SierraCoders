@@ -106,8 +106,10 @@ namespace aspnetapp.Pages.Account
                     Lecturer.UUID = Guid.NewGuid();
                     account.LecturerGuid = Lecturer.UUID;
                     Database.AddLectuer(Lecturer);
-                } else
-                    Database.lectuerers[Lecturer.UUID] = Lecturer;
+                }
+                else
+                    lock (Database.lectuerers)
+                        Database.lectuerers[Lecturer.UUID] = Lecturer;
 
                 return Redirect("/account");
             }

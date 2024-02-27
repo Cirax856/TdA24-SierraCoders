@@ -1,5 +1,6 @@
 ﻿using aspnetapp.Auth;
 using aspnetapp.Models;
+using aspnetapp.Models.Schedule;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -15,14 +16,20 @@ namespace aspnetapp
         public static readonly Dictionary<Guid, DbLecturer> lectuerers = new Dictionary<Guid, DbLecturer>();
         public static readonly List<Lecturer.Tag> tags = new List<Lecturer.Tag>();
 
-        internal static Dictionary<uint, Account> acounts = new Dictionary<uint, Account>();
+        internal static Dictionary<uint, Account> accounts = new Dictionary<uint, Account>();
         internal static List<LoginSession> sessions = new List<LoginSession>();
         internal static Dictionary<string, uint> emailVerifications = new Dictionary<string, uint>();
-            
+
         internal static string emailPass;
 
+        // lecturer id -> lecturer's subjects
+        internal static Dictionary<Guid, List<Subject>> subjects = new Dictionary<Guid, List<Subject>>();
+
         public static void AddLectuer(Lecturer lecturer)
-            => lectuerers[lecturer.UUID] = lecturer;
+        {
+            lock (lectuerers)
+                lectuerers[lecturer.UUID] = lecturer;
+        }
 
         public static Lecturer GetLecturer(Guid uuid)
             => lectuerers[uuid];
@@ -34,17 +41,24 @@ namespace aspnetapp
                 lecturer = _lecturer;
             else
                 lecturer = null;
+
             return val;
         }
 
-        public static bool ContainsKey(Guid uuid)
+        public static bool ContainsLecturer(Guid uuid)
             => lectuerers.ContainsKey(uuid);
 
         public static bool Remove(Guid uuid)
-            => lectuerers.Remove(uuid);
+        {
+            lock (lectuerers)
+                return lectuerers.Remove(uuid);
+        }
 
         public static void AddTag(Lecturer.Tag tag)
-            => tags.Add(tag);
+        {
+            lock (tags)
+                tags.Add(tag);
+        }
 
         public static bool ContainsTag(Lecturer.Tag tag)
             => tags.Contains(tag);
@@ -54,17 +68,25 @@ namespace aspnetapp
             try
             {
                 using SaveWriter writer = new SaveWriter(SavePath, true);
-                saveLecturers(writer);
-                saveTags(writer);
-                saveAccounts(writer);
-                saveSessions(writer);
+
+                lock (lectuerers)
+                    saveLecturers(writer);
+                lock (tags)
+                    saveTags(writer);
+                lock (accounts)
+                    saveAccounts(writer);
+                lock (sessions)
+                    saveSessions(writer);
                 writer.WriteString(emailPass);
 
-                writer.WriteList(emailVerifications.ToList());
+                lock (emailVerifications)
+                    writer.WriteList(emailVerifications.ToList());
+
                 writer.Flush();
 
                 Log.Info("Saved database");
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Log.Error("There was an error saving:");
                 Log.Exception(ex);
@@ -73,28 +95,42 @@ namespace aspnetapp
         }
         public static void Load()
         {
-            if (!File.Exists(SavePath)) {
-                lectuerers.Clear();
-                tags.Clear();
-                acounts.Clear();
-                sessions.Clear();
+            if (!File.Exists(SavePath))
+            {
+                lock (lectuerers)
+                    lectuerers.Clear();
+                lock (tags)
+                    tags.Clear();
+                lock (accounts)
+                    accounts.Clear();
+                lock (sessions)
+                    sessions.Clear();
                 emailPass = "";
-				emailVerifications.Clear();
+                lock (emailVerifications)
+                    emailVerifications.Clear();
+
                 Save();
             }
             try
             {
                 using SaveReader reader = new SaveReader(SavePath);
-                loadLecturers(reader);
-                loadTags(reader);
-                loadAccounts(reader);
-                loadSessions(reader);
+
+                lock (lectuerers)
+                    loadLecturers(reader);
+                lock (tags)
+                    loadTags(reader);
+                lock (accounts)
+                    loadAccounts(reader);
+                lock (sessions)
+                    loadSessions(reader);
                 emailPass = reader.ReadString();
 
-                emailVerifications = reader.ReadList<KeyValuePair<string, uint>>().ToDictionary(item => item.Key, item => item.Value);
+                lock (emailVerifications)
+                    emailVerifications = reader.ReadList<KeyValuePair<string, uint>>().ToDictionary(item => item.Key, item => item.Value);
 
                 Log.Info("Loaded database");
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Log.Error("There was an error loading:");
                 Log.Exception(ex);
@@ -177,8 +213,8 @@ namespace aspnetapp
         }
         private static void saveAccounts(SaveWriter writer)
         {
-            writer.WriteInt32(acounts.Count);
-            foreach (var item in acounts)
+            writer.WriteInt32(accounts.Count);
+            foreach (var item in accounts)
             {
                 writer.WriteUInt32(item.Key);
                 item.Value.Save(writer);
@@ -186,12 +222,12 @@ namespace aspnetapp
         }
         private static void loadAccounts(SaveReader reader)
         {
-            acounts.Clear();
+            accounts.Clear();
 
             int count = reader.ReadInt32();
 
             for (int i = 0; i < count; i++)
-                acounts.Add(reader.ReadUInt32(), Account.Load(reader));
+                accounts.Add(reader.ReadUInt32(), Account.Load(reader));
         }
         private static void saveSessions(SaveWriter writer)
         {

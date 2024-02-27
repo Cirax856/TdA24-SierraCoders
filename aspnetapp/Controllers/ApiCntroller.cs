@@ -118,7 +118,7 @@ namespace aspnetapp.Controllers
                     return statusWithJson(400);
                 }
 
-                if (Database.ContainsKey(guid)) {
+                if (Database.ContainsLecturer(guid)) {
                     Lecturer oldLecturer = Database.GetLecturer(guid);
                     Database.Remove(guid);
                     lecturer = oldLecturer.Apply(lecturer);
@@ -144,7 +144,7 @@ namespace aspnetapp.Controllers
         {
             try { 
                 Log.Request(Request);
-                if (Database.lectuerers.ContainsKey(guid))
+                if (Database.ContainsLecturer(guid))
                 {
                     Database.Remove(guid);
                     Log.Debug("204 OK");

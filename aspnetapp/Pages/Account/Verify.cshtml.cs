@@ -15,10 +15,10 @@ namespace aspnetapp.Pages.Account
             else
             {
                 Database.emailVerifications.Remove(_id.ToString());
-                Database.acounts[accountId].Verified = true;
+                Database.accounts[accountId].Verified = true;
                 Database.Save();
 
-                AccountName = Database.acounts[accountId].Username;
+                AccountName = Database.accounts[accountId].Username;
 
                 return Page();
             }

@@ -27,8 +27,8 @@ namespace aspnetapp
                 Database.Load();
             }
 
-            if (Database.acounts.Count == 0)
-                Database.acounts.Add(0, new Account(true, DateTime.UtcNow, "BestUser", "realMain@google.com", SecretHasher.Hash("12345678"), new Guid()));
+            if (Database.accounts.Count == 0)
+                Database.accounts.Add(0, new Account(true, DateTime.UtcNow, "BestUser", "realMain@google.com", SecretHasher.Hash("12345678"), new Guid()));
 
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -121,9 +121,7 @@ namespace aspnetapp
             string[] tags = new string[] { "Frontend", "CSS", "Backend", "CTF" };
 
             for (int i = 0; i < tags.Length; i++)
-            {
                 Database.tags.Add(new Lecturer.Tag() { uuid = tags[i].GetHash(), name = tags[i] });
-            }
 
             WebApplication app = builder.Build();
 

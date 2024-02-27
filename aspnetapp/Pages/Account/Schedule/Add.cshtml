@@ -1,0 +1,29 @@
+﻿@page
+@using aspnetapp.Models.Schedule
+@model aspnetapp.Pages.Account.Schedule.AddModel
+@{
+}
+
+<body>
+    <h1>Add week preset</h1>
+    <div>
+        <h2>Subjects:</h2>
+        @{
+            int i = 0;
+            foreach (Subject subject in Database.subjects[Model.Account.LecturerGuid])
+            {
+                <div>
+                    <label for= "sn_@(i)">Name: </label>
+                    <input id="sn_@(i)" type="text" value="@subject.Name" placeholder="Name" /> <br />
+
+                    <label for="sd_@(i)">Description:</label>
+                    <input id="sd_@(i)" type="text" value="@subject.Description" placeholder="Description" />
+                </div>
+                i++;
+            }
+        }
+    </div>
+    <script>
+        var subjectNames = new Set([ @Html.Raw(string.Join(", ", Database.subjects[Model.Account.LecturerGuid].Select(str => $"\"{str}\""))) ]);
+    </script>
+</body>
