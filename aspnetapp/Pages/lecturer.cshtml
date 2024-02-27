@@ -11,7 +11,19 @@
 	<title>@ViewBag.Title</title>
 </head>
 <body>
-	<div class="title">
+	<div class="lecturer">
+		<img src=@Model.lecturer.picture_url alt="Profile picture" />
+		<div>
+			<h1>@Model.lecturer.DisplayName</h1>
+			<p>From @Model.lecturer.location</p>
+			<p>@Model.lecturer.price_per_hour Kč per hour</p>
+			<button>RESERVE</button>
+		</div>
+		<p>@Model.lecturer.claim</p>
+		<p>@Html.Raw(Model.lecturer.bio?.Sanitize() ?? "")</p>
+	</div>
+
+	@* <div class="title">
 		<img alt="Profile picture" src=@Model.lecturer.picture_url class="profile_picture">
 		<div class="name_location">
 			<h1 class="name">@Model.lecturer.DisplayName</h1>
@@ -73,6 +85,6 @@
 				</ul>
 			</div>
 		</div>
-	</div>
+	</div> *@
 </body>
 </html>

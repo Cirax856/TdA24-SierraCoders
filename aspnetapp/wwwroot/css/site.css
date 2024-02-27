@@ -168,6 +168,41 @@ body {
         grid-column-start: span 2;
     }
 
+.lecturer {
+    padding: 1rem;
+    display: grid;
+    grid-template-rows: 25vh max-content auto;
+    grid-template-columns: 25vh auto;
+}
+
+    .lecturer > img {
+        width: 25vh;
+    }
+
+    .lecturer > div {
+        margin-left: 1vh;
+        font-size: 2vh;
+    }
+
+        .lecturer > div > button {
+            width: 20vh;
+            height: 5vh;
+            padding: 1vh;
+            margin-top: 1vh;
+            outline: none;
+            background-color: #74C7DC;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 3vh;
+            cursor: pointer;
+        }
+
+    .lecturer > p {
+        grid-column-start: span 2;
+        padding-top: 1rem;
+    }
+
 ::-webkit-scrollbar {
     width: 10px;
 }

@@ -46,7 +46,7 @@ namespace aspnetapp
                 picture_url = "https://static-cdn.jtvnw.net/jtv_user_pictures/49e9609d-80a0-46f6-ba33-857c3f2fb113-profile_image-300x300.png",
                 location = "Brno",
                 claim = "Student",
-                bio = "<p><span style=\"color: red;\">Frontend developer</span> a student.</p>",
+                bio = "<p><span style=\"color: red;\">Frontend developer</span> and a student.</p>",
                 tags = new Lecturer.Tag[]
                 {
                     new Lecturer.Tag()
@@ -76,7 +76,7 @@ namespace aspnetapp
                 picture_url = "https://i.ibb.co/Z8T6pcb/Capture.png",
                 location = "Hodonín",
                 claim = "Student",
-                bio = "<p><span style=\"color: green;\">Backend developer</span> a student.</p>",
+                bio = "<p><span style=\"color: green;\">Backend developer</span> and a student.</p>",
                 tags = new Lecturer.Tag[]
                 {
                     new Lecturer.Tag()
@@ -101,7 +101,7 @@ namespace aspnetapp
                 picture_url = "https://cdn.discordapp.com/avatars/487850221997522954/859f86040a70f34f43b3cb083e095774.webp?size=640",
                 location = "Víťův sklep",
                 claim = "Student",
-                bio = "<p><span style=\"color: darkblue;\">CTF Master</span> a student.</p>",
+                bio = "<p><span style=\"color: darkblue;\">CTF Master</span> and a student.</p>",
                 tags = new Lecturer.Tag[]
                 {
                     new Lecturer.Tag()
