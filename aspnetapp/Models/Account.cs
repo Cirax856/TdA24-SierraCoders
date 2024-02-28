@@ -36,9 +36,6 @@ namespace aspnetapp.Models
             {
                 lecturer.UUID = Guid.NewGuid();
                 Database.AddLectuer(lecturer);
-                if (!Database.subjects.ContainsKey(lecturer.UUID))
-                    lock (Database.subjects)
-                        Database.subjects[lecturer.UUID] = new List<Schedule.Subject>();
             }
 
             LecturerGuid = lecturer.UUID;
