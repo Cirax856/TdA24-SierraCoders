@@ -13,6 +13,9 @@ namespace aspnetapp.Pages.Account
         {
             if (tryGetAcount(out Models.Account account))
             {
+                if (!account.HasLecturer)
+                    return Redirect("/account/lecturer");
+
                 Account = account;
 
                 if (Request.Query.TryGetValue("date", out StringValues _date) && DateOnly.TryParse(_date, out DateOnly date))

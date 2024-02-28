@@ -2,28 +2,117 @@
 @using aspnetapp.Models.Schedule
 @model aspnetapp.Pages.Account.Schedule.AddModel
 @{
+    ScheduleInfo info = Database.GetSchedule(Model.Account.LecturerGuid);
 }
 
 <body>
     <h1>Add week preset</h1>
     <div>
+        <label for="preset_name_inp">Preset name:</label>
+        <input id="preset_name_inp" type="text" name="preset_name" />
+        <div>
+            <label for="from_inp">From:</label>
+            <input id="from_inp" type="time" name="from_time" min="5:00" max="22:59" value="7:00" required />
+            <label for="to_inp">To:</label>
+            <input id="to_inp" type="time" name="to_time" min="5:01" max="23:00" value="16:00" />
+        </div>
+        <div id="subjects">
+            <!--Monday, Tuesday...-->
+        </div>
+    </div>
+    <div>
         <h2>Subjects:</h2>
-        @{
-            int i = 0;
-            foreach (Subject subject in Database.subjects[Model.Account.LecturerGuid])
-            {
-                <div>
-                    <label for= "sn_@(i)">Name: </label>
-                    <input id="sn_@(i)" type="text" value="@subject.Name" placeholder="Name" /> <br />
-
-                    <label for="sd_@(i)">Description:</label>
-                    <input id="sd_@(i)" type="text" value="@subject.Description" placeholder="Description" />
-                </div>
-                i++;
+        <div>
+            <h3>Add Subject</h3>
+            <label for="add_name_inp">Name:</label>
+            <input id="add_name_inp" type="text" minLength="1" maxlength="10" />
+            <label for="add_decs_inp">Description:</label>
+            <input id="add_decs_inp" type="text" minLength="0" maxlength="30" />
+            <button type="button" onclick="addSubjectFromInp()">Add</buttont>
+        </div>
+        <div id="subject_container">
+            @{
+                int i = 0;
+                foreach (Subject subject in info.Subjects)
+                {
+                    <div>
+                        <p>@subject.Name</p>
+                        <p>@subject.Description</p>
+                    </div>
+                    i++;
+                }
             }
-        }
+        </div>
     </div>
     <script>
-        var subjectNames = new Set([ @Html.Raw(string.Join(", ", Database.subjects[Model.Account.LecturerGuid].Select(str => $"\"{str}\""))) ]);
+        var subjects = new Set([["None", ""], @Html.Raw(string.Join(", ", info.Subjects.Select(subject => $"[ \"{subject.Name}\", \"{subject.Description}\" ]"))) ]);
+
+        var addNameInp;
+        var addDescInp;
+        var subjectContainer;
+
+        async function addSubjectFromInp() {
+            return await addSubject(addNameInp.value, addDescInp.value, true);
+        }
+        async function addSubject(name, desc, popup) {
+            var err = null;
+            if (name.length < 1 || name.length > 10)
+                err = "Name must be between 1-10 characters";
+            else if (desc.length > 30)
+                err = "Description must be between 0-30 characters";
+            else if (set_some(subjects, array => array[0] === name))
+                err = `There already is a subject with the name '${name}'`;
+
+            if (err !== null) {
+                if (popup)
+                    alert(err);
+
+                return false;
+            } else {
+                var response;
+                try {
+                    response = await fetch("/api/subject/add", { method: "PUT", body: JSON.stringify({ "name": name, "desc": desc }) });
+                } catch (error) {
+                    if (popup)
+                        alert("There was an error adding the subject: " + error);
+
+                    return false;
+                }
+
+                if (!response.ok) {
+                    if (popup)
+                        alert("Error: " + response.body);
+
+                    return false;
+                }
+
+                addSubjectElement(name, desc);
+
+                subjects.add([name, desc]);
+
+                return true;
+            }
+        }
+
+        function addSubjectElement(name, desc) {
+            var div = document.createElement("div");
+            var pName = document.createElement("p");
+            var pDesc = document.createElement("p");
+
+            pName.innerText = name;
+            pDesc.innerText = desc;
+
+            div.appendChild(pName);
+            div.appendChild(pDesc);
+            subjectContainer.appendChild(div);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            addNameInp = document.getElementById("add_name_inp");
+            addDescInp = document.getElementById("add_decs_inp");
+            subjectContainer = document.getElementById("subject_container");
+
+            addSubjectElement("None", "");
+        });
     </script>
 </body>

@@ -1,4 +1,5 @@
 ﻿using Org.BouncyCastle.Crypto;
+using System.Security.Principal;
 
 namespace aspnetapp.Models
 {
@@ -12,7 +13,7 @@ namespace aspnetapp.Models
         public string Username;
         public string Email;
         public string PasswordHash;
-        public Guid LecturerGuid;
+        public Guid LecturerGuid { get; private set; }
 
         public bool HasLecturer => LecturerGuid != default;
 
@@ -27,6 +28,20 @@ namespace aspnetapp.Models
             Email = _email;
             PasswordHash = _passwordHash;
             LecturerGuid = _lecturerGuid;
+        }
+
+        public void SetLecturer(Lecturer lecturer)
+        {
+            if (lecturer.UUID == default)
+            {
+                lecturer.UUID = Guid.NewGuid();
+                Database.AddLectuer(lecturer);
+                if (!Database.subjects.ContainsKey(lecturer.UUID))
+                    lock (Database.subjects)
+                        Database.subjects[lecturer.UUID] = new List<Schedule.Subject>();
+            }
+
+            LecturerGuid = lecturer.UUID;
         }
 
         public void Save(SaveWriter writer)

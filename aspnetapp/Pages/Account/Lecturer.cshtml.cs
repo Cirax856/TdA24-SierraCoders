@@ -102,11 +102,7 @@ namespace aspnetapp.Pages.Account
             else
             {
                 if (!account.HasLecturer)
-                {
-                    Lecturer.UUID = Guid.NewGuid();
-                    account.LecturerGuid = Lecturer.UUID;
-                    Database.AddLectuer(Lecturer);
-                }
+                    account.SetLecturer(Lecturer);
                 else
                     lock (Database.lectuerers)
                         Database.lectuerers[Lecturer.UUID] = Lecturer;

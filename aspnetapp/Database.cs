@@ -23,7 +23,7 @@ namespace aspnetapp
         internal static string emailPass;
 
         // lecturer id -> lecturer's subjects
-        internal static Dictionary<Guid, List<Subject>> subjects = new Dictionary<Guid, List<Subject>>();
+        internal static Dictionary<Guid, ScheduleInfo> schedules = new Dictionary<Guid, ScheduleInfo>();
 
         public static void AddLectuer(Lecturer lecturer)
         {
@@ -62,6 +62,19 @@ namespace aspnetapp
 
         public static bool ContainsTag(Lecturer.Tag tag)
             => tags.Contains(tag);
+
+        public static ScheduleInfo GetSchedule(Guid lecturerId)
+        {
+            if (schedules.TryGetValue(lecturerId, out var _subjects)) return _subjects;
+            else if (lectuerers.ContainsKey(lecturerId))
+            {
+                _subjects = new ScheduleInfo();
+                schedules.Add(lecturerId, _subjects);
+                return _subjects;
+            }
+            else
+                return null;
+        }
 
         public static void Save()
         {

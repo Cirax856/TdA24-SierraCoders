@@ -1,13 +1,26 @@
 ﻿@page
+@using aspnetapp.Models.Schedule
 @model aspnetapp.Pages.Account.ScheduleModel
 @{
+	ScheduleInfo info = Database.GetSchedule(Model.Account.LecturerGuid);
 }
 
 <body>
 	<a href="/account/schedule/add">Add week preset</a><br />
 	<label for="scheduleDate">Date:</label>
-	<input type="date" id="scheduleDate" value="@Model.ScheduleDate.ToString("yyyy-MM-dd")" onchange="dateChanged(event)">
-	<br />
+	<input type="date" id="scheduleDate" value="@Model.ScheduleDate.ToString("yyyy-MM-dd")" onchange="dateChanged(event)"><br />
+	<label for="preset">Select preset:</label>
+	<select id="preset" name="preset">
+		@{
+			foreach (var item in info.Presets)
+			{
+				<option value="@item.Name">@item.Name</option>
+			}
+		}
+	</select>
+	<div id="schedule">
+		<!--Monday, Tuesday...-->
+	</div>
 
 	<script>
 		var dateSelector;
