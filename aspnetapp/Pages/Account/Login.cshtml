@@ -5,13 +5,15 @@
 
 <body>
     <script>document.getElementById("topSignInDiv").classList.toggle("selected")</script>
-    <form method="post">
+    <h1 class="title">Sign In</h1>
+    <form method="post" class="login">
         <label for="username">Username:</label>
-        <input id="username" name="username" type="text" required /><br />
+        <input id="username" name="username" type="text" class="input" required /><br /><br />
         <label for="password">Password:</label>
-        <input id="password" name="password" type="password" required /><br />
-        <input type="submit" value="Login"><br />
+        <input id="password" name="password" type="password" class="input" required /><br />
+        <input type="submit" value="SIGN IN" class="submit">
     </form>
+    <button class="submit padding" onclick="window.location.replace('./register');">REGISTER</button>
     @{
         if (!string.IsNullOrWhiteSpace(Model.ErrorMesage))
         {

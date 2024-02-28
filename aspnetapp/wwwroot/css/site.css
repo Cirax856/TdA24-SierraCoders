@@ -4,16 +4,25 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    user-select: none;
+}
+
+:root {
+    --primary-color: #272727;
+    --secondary-color: #808080;
+    --text-color: white;
+    --gradient: #1E1E1E;
+    --scrollbar: #272727;
 }
 
 body {
     width: 100vw;
     height: 100vh;
-    background-color: #1E1E1E;
+    background-color: var(--gradient);
 }
 
 .topbar {
-    background-color: #272727;
+    background-color: var(--primary-color);
     width: 100%;
     height: 10%;
     display: flex;
@@ -67,19 +76,21 @@ body {
         text-align: center;
         font-family: 'Lalezar';
         font-size: 300%;
+        color: var(--text-color);
     }
 
     .content > .aboutus {
         padding: 0 1rem;
         font-family: 'Lalezar';
+        color: var(--text-color);
     }
 
 .footer {
     font-family: "Lalezar";
-    background-color: #272727;
+    background-color: var(--primary-color);
     width: 100%;
     height: 10%;
-    color: #808080;
+    color: var(--secondary-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -88,7 +99,7 @@ body {
 
     .footer > a {
         text-decoration: none;
-        color: #808080;
+        color: var(--secondary-color);
     }
 
     .footer > div {
@@ -98,6 +109,7 @@ body {
 
         .footer > div > svg {
             margin-right: 1rem;
+            fill: var(--secondary-color);
         }
 
 .stylessLink {
@@ -173,6 +185,7 @@ body {
     display: grid;
     grid-template-rows: 25vh max-content auto;
     grid-template-columns: 25vh auto;
+    color: var(--text-color);
 }
 
     .lecturer > img {
@@ -203,12 +216,145 @@ body {
         padding-top: 1rem;
     }
 
+.login {
+    padding-left: 1rem;
+    font-size: 3vh;
+}
+
+    .login > .input {
+        width: 30vh;
+        height: 5vh;
+        border-radius: 18px;
+        border: none;
+        outline: none;
+        padding: .5rem;
+        font-size: 3vh;
+    }
+
+    .login > label {
+        color: var(--text-color);
+    }
+
+.submit {
+    width: 20vh;
+    height: 5vh;
+    padding: 1vh;
+    margin-top: 1vh;
+    outline: none;
+    background-color: #74C7DC;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 3vh;
+    cursor: pointer;
+}
+
+.padding {
+    margin-left: 1rem;
+}
+
+.searchButton {
+    position: absolute;
+    top: 10%;
+    left: 1%;
+    width: 20vh;
+    height: 5vh;
+    padding: 1vh;
+    margin-top: 1vh;
+    outline: none;
+    background-color: #74C7DC;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 3vh;
+    cursor: pointer;
+}
+
+.search {
+    width: 80%;
+    height: 80%;
+    background: linear-gradient(108deg, #4F889D -31.32%, #00384D 75.13%);
+    border-radius: 16px;
+    z-index: 94984;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+    .search > form {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-rows: 90% 10%;
+        grid-template-columns: 40% 60%;
+        padding: 1rem 0 0 1rem;
+        font-size: 3vh;
+        font-family: 'Lalezar';
+    }
+
+        .search > form > .basicinfo {
+            display: grid;
+            grid-template-rows: repeat(4, 6vh);
+            grid-template-columns: 50% 50%;
+        }
+
+            .search > form > .basicinfo > input {
+                border-radius: 100px;
+                background-color: #74C7D3;
+                border: none;
+                outline: none;
+                height: 4vh;
+                width: 90%;
+                color: white;
+                padding: 0 .5rem;
+            }
+
+        .search > form > .submitContainer {
+            grid-column-start: span 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: right;
+            padding-right: 1rem;
+        }
+
+            .search > form > .submitContainer > input {
+                width: 20vh;
+                height: 5vh;
+                padding: 1vh;
+                margin-top: 1vh;
+                outline: none;
+                background-color: #74C7DC;
+                border: none;
+                border-radius: 6px;
+                color: white;
+                font-size: 3vh;
+                cursor: pointer;
+            }
+
+        .search > form > .tagsContainer > .tags {
+            width: 95%;
+            height: 90%;
+            background-color: #74C7DC;
+            overflow-y: auto;
+            padding-left: 1rem;
+        }
+
+            .search > form > .tagsContainer > .tags > span > input {
+                outline: none;
+                border: none;
+                border-radius: 6px;
+                width: 1rem;
+                height: 1rem;
+            }
+
 ::-webkit-scrollbar {
     width: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #272727;
+    background: var(--scrollbar);
     border-radius: 6px;
 }
 
