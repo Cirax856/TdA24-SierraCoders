@@ -121,7 +121,11 @@ namespace aspnetapp
             string[] tags = new string[] { "Frontend", "CSS", "Backend", "CTF" };
 
             for (int i = 0; i < tags.Length; i++)
-                Database.tags.Add(new Lecturer.Tag() { uuid = tags[i].GetHash(), name = tags[i] });
+            {
+                Lecturer.Tag tag = new Lecturer.Tag() { uuid = tags[i].GetHash(), name = tags[i] };
+                if (!Database.tags.Contains(tag))
+				    Database.tags.Add(tag);
+            }
 
             WebApplication app = builder.Build();
 
