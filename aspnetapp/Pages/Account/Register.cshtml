@@ -4,16 +4,17 @@
 }
 
 <body>
-    <form>
+    <h1 class="title">Register</h1>
+    <form class="login">
         <label for="username">Username:</label>
-        <input name="username" type="text" value="@Model.Username" minlength="4" maxlength="30" /><br />
+        <input name="username" type="text" value="@Model.Username" minlength="4" maxlength="30" class="input" required /><br /><br />
         <label for="email">Email:</label>
-        <input name="email" type="email" value="@Model.Email" minlength="4" maxlength="60" /><br />
+        <input name="email" type="email" value="@Model.Email" minlength="4" maxlength="60" class="input" required /><br /><br />
         <label for="password">Password:</label>
-        <input name="password" type="password" value="@Model.Password" minlength="8" maxlength="60" /><br />
+        <input name="password" type="password" value="@Model.Password" minlength="8" maxlength="60" class="input" required /><br /><br />
         <label for="password2">Confirm Password:</label>
-        <input name="password2" type="password" value="@Model.Password2" minlength="8" maxlength="60" /><br />
-        <input type="submit" value="Register" />
+        <input name="password2" type="password" value="@Model.Password2" minlength="8" maxlength="60" class="input" required /><br />
+        <input type="submit" value="REGISTER" class="submit" />
     </form>
     @{
         if (!string.IsNullOrWhiteSpace(Model.Error))
