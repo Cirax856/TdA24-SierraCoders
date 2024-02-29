@@ -14,31 +14,38 @@
         <input id="preset_name_inp" type="text" name="preset_name" />
         <div>
             <label for="from_inp">From:</label>
-            <input id="from_inp" type="time" name="from_time" min="05:00" max="22:59" value="07:00" required />
+            <input id="from_inp" type="time" name="from_time" onchange="fromToChanged()" min="05:00" max="22:59" value="07:00" required />
             <label for="to_inp">To:</label>
-            <input id="to_inp" type="time" name="to_time" min="05:01" max="23:00" value="16:00" />
+            <input id="to_inp" type="time" name="to_time" onchange="fromToChanged()" min="05:01" max="23:00" value="16:00" />
         </div>
         <div id="week_container">
-            <div class="day" id="mon_div" onmouseup="acceptDrop('mon_div')">
+            <div class ="dday" onmouseup="acceptDrop('mon_div', 0)">
                 <div class="dayInfo">MON</div>
+                <div class="day" id="mon_div"></div>
             </div>
-            <div class="day" id="tue_div" onmouseup="acceptDrop('tue_div')">
+            <div class="dday" onmouseup="acceptDrop('tue_div', 1)">
                 <div class="dayInfo">TUE</div>
+                <div class="day" id="tue_div"></div>
             </div>
-            <div class="day" id="wed_div" onmouseup="acceptDrop('wed_div')">
+            <div class="dday" onmouseup="acceptDrop('wed_div', 2)">
                 <div class="dayInfo">WED</div>
+                <div class="day" id="wed_div"></div>
             </div>
-            <div class="day" id="thu_div" onmouseup="acceptDrop('thu_div')">
+            <div class="dday" onmouseup="acceptDrop('thu_div', 3)">
                 <div class="dayInfo">THU</div>
+                <div class="day" id="thu_div"></div>
             </div>
-            <div class="day" id="fri_div" onmouseup="acceptDrop('fri_div')">
-                <div class="dayInfo">FIR</div>
+            <div class="dday" onmouseup="acceptDrop('fri_div', 4)">
+                <div class="dayInfo">FRI</div>
+                <div class="day" id="fri_div"></div>
             </div>
-            <div class="day" id="sat_div" onmouseup="acceptDrop('sat_div')">
+            <div class="dday" onmouseup="acceptDrop('sat_div', 5)">
                 <div class="dayInfo">SAT</div>
+                <div class="day" id="sat_div"></div>
             </div>
-            <div class="day" id="sun_div" onmouseup="acceptDrop('sun_div')">
+            <div class="dday" onmouseup="acceptDrop('sun_div', 6)">
                 <div class="dayInfo">SUN</div>
+                <div class="day" id="sun_div"></div>
             </div>
         </div>
     </div>
@@ -70,26 +77,105 @@
     <script>
         var subjects = new Set([["None", ""], @Html.Raw(string.Join(", ", info.Subjects.Select(subject => $"[ \"{subject.Name.ToLowerInvariant()}\", \"{subject.Description}\" ]"))) ]);
 
+        // [name, description, length in minutes]
+        var schedule = [[], [], [], [], [], [], []];
+
         var addNameInp;
         var addDescInp;
         var subjectContainer;
+
+        var fromTimeInp;
+        var toTimeInp;
 
         var dragging = false;
         var dragObject;
         var dragInfo;
 
-        function acceptDrop(myId) {
+        function fromToChanged() {
+            var fromSplit = fromTimeInp.value.split(':');
+            var from = parseInt(fromSplit[0]) * 60 + parseInt(fromSplit[1]);
+            var toSplit = toTimeInp.value.split(':');
+            var to = parseInt(toSplit[0]) * 60 + parseInt(toSplit[1]);
+            var longest = calculateLongestDay();
+
+            if (from + longest >= to) {
+                to = Math.min(from + longest + 1, 23 * 60);
+                var diff = to - (from + longest + 1);
+                // push back from if to hit bounds
+                from += diff;
+            }
+
+            fromTimeInp.value = minutesToTime(from);
+            toTimeInp.value = minutesToTime(to);
+
+            updateLengths();
+        }
+        function calculateLongestDay() {
+            var length = 0;
+            for (var i = 0; i < schedule.length; i++) {
+                var l = 0;
+                for (var j = 0; j < schedule[i].length; j++)
+                    l += schedule[i][j][2];
+
+                length = Math.max(length, l);
+            }
+
+            return length;
+        }
+        function updateLengths() {
+            var dayContainers = [
+                "mon_div",
+                "tue_div",
+                "wed_div",
+                "thu_div",
+                "fri_div",
+                "sat_div",
+                "sun_div"
+            ];
+            var scheduleLength = calculateScheduleLength();
+            for (var i = 0; i < dayContainers.length; i++) {
+                var k = 0;
+                const container = document.getElementById(dayContainers[i]);
+                for (var j = 0; j < container.children.length; j++) {
+                    var child = container.children[j];
+                    if (child != undefined && child.id === "inSchSubj") {
+                        udateLength(child, schedule[i][k][2], scheduleLength);
+                        k++;
+                    }
+                }
+            }
+        }
+        function calculateScheduleLength() {
+            var fromSplit = fromTimeInp.value.split(':');
+            var from = parseInt(fromSplit[0]) * 60 + parseInt(fromSplit[1]);
+            var toSplit = toTimeInp.value.split(':');
+            var to = parseInt(toSplit[0]) * 60 + parseInt(toSplit[1]);
+
+            return to - from;
+        }
+        function udateLength(element, minutes, scheduleLength) {
+            if (scheduleLength == undefined)
+                scheduleLength = calculateScheduleLength();
+
+            var length = (minutes / scheduleLength) * 100.0;
+            element.style.width = length + "%";
+        }
+
+        function acceptDrop(myId, dayId) {
             if (!dragging) return;
 
             var div = document.getElementById(myId);
             var day = myId.split('_')[0];
 
+            schedule[dayId].push([dragInfo[0], dragInfo[1], 45]);
+
             dragging = false;
-            dragObject.id = "";
+            dragObject.id = "inSchSubj";
             dragObject.style = "";
             dragObject.className = "inSchSubj"
             dragObject.style.backgroundColor = stringToColor(dragInfo[0]);
             div.appendChild(dragObject);
+            udateLength(dragObject, 45);
         }
 
         function startDrag(objId, info) {
@@ -176,6 +262,9 @@
             addNameInp = document.getElementById("add_name_inp");
             addDescInp = document.getElementById("add_decs_inp");
             subjectContainer = document.getElementById("subject_container");
+
+            fromTimeInp = document.getElementById("from_inp");
+            toTimeInp = document.getElementById("to_inp");
 
             addSubjectElement("None", "");
 

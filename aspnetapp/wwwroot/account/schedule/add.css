@@ -1,8 +1,15 @@
 ﻿body {
 }
 
+.dday {
+    height: 3.5rem;
+    display: flex;
+    width: 100%;
+}
+
 .day {
     height: 3.5rem;
+    flex: 1;
 }
 
 .dayInfo {
@@ -12,7 +19,6 @@
 
 .inSchSubj {
     height: 100%;
-    width: 3.5rem;
     display: inline-block;
     overflow: hidden;
 }

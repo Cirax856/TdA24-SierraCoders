@@ -35,3 +35,16 @@ function stringToColor(str) {
 
     return color;
 }
+
+function minutesToTime(minutes) {
+    let hours = Math.floor(minutes / 60);
+    let mins = minutes % 60;
+
+    if (hours < 10)
+        hours = '0' + hours;
+    if (mins < 10)
+        mins = '0' + mins;
+
+    // Construct the time string in the format hh:mm
+    return `${hours}:${mins}`;
+}
