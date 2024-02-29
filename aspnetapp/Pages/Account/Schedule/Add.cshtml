@@ -14,12 +14,12 @@
         <input id="preset_name_inp" type="text" name="preset_name" />
         <div>
             <label for="from_inp">From:</label>
-            <input id="from_inp" type="time" name="from_time" onchange="fromToChanged()" min="05:00" max="22:59" value="07:00" required />
+            <input id="from_inp" type="time" name="from_time" onchange="ensureFromTo()" min="05:00" max="22:59" value="07:00" required />
             <label for="to_inp">To:</label>
-            <input id="to_inp" type="time" name="to_time" onchange="fromToChanged()" min="05:01" max="23:00" value="16:00" />
+            <input id="to_inp" type="time" name="to_time" onchange="ensureFromTo()" min="05:01" max="23:00" value="16:00" />
         </div>
         <div id="week_container">
-            <div class ="dday" onmouseup="acceptDrop('mon_div', 0)">
+            <div class="dday" onmouseup="acceptDrop('mon_div', 0)">
                 <div class="dayInfo">MON</div>
                 <div class="day" id="mon_div"></div>
             </div>
@@ -91,7 +91,7 @@
         var dragObject;
         var dragInfo;
 
-        function fromToChanged() {
+        function ensureFromTo() {
             var fromSplit = fromTimeInp.value.split(':');
             var from = parseInt(fromSplit[0]) * 60 + parseInt(fromSplit[1]);
             var toSplit = toTimeInp.value.split(':');
@@ -164,10 +164,26 @@
         function acceptDrop(myId, dayId) {
             if (!dragging) return;
 
+            var currentLength = 0;
+            for (var i = 0; i < schedule[dayId].length; i++)
+                currentLength += schedule[dayId][i][2];
+
+            const maxTime = 1080;
+            var time = 45;
+            if (currentLength + 45 >= maxTime) {
+                if (currentLength + 5 >= maxTime) {
+                    alert("Not enought time in this day, remove some subjects before adding more");
+                    dragging = false;
+                    dragObject.remove();
+                    dragInfo = null;
+                } else
+                    time = maxTime - currentLength - 1;
+            }
+
             var div = document.getElementById(myId);
             var day = myId.split('_')[0];
 
-            schedule[dayId].push([dragInfo[0], dragInfo[1], 45]);
+            schedule[dayId].push([dragInfo[0], dragInfo[1], time]);
 
             dragging = false;
             dragObject.id = "inSchSubj";
@@ -175,7 +191,9 @@
             dragObject.className = "inSchSubj"
             dragObject.style.backgroundColor = stringToColor(dragInfo[0]);
             div.appendChild(dragObject);
-            udateLength(dragObject, 45);
+
+            ensureFromTo();
+            //udateLength(dragObject, time);
         }
 
         function startDrag(objId, info) {
@@ -281,11 +299,9 @@
             document.addEventListener('mouseup', function (event) {
                 if (!dragging) return;
 
-                //if (event.target === null) {
                 dragging = false;
                 dragObject.remove();
                 dragInfo = null;
-                //}
             });
         });
     </script>
