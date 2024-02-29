@@ -5,6 +5,8 @@
     ScheduleInfo info = Database.GetSchedule(Model.Account.LecturerGuid);
 }
 
+<link rel="stylesheet" href="add.css" />
+
 <body>
     <h1>Add week preset</h1>
     <div>
@@ -12,12 +14,32 @@
         <input id="preset_name_inp" type="text" name="preset_name" />
         <div>
             <label for="from_inp">From:</label>
-            <input id="from_inp" type="time" name="from_time" min="5:00" max="22:59" value="7:00" required />
+            <input id="from_inp" type="time" name="from_time" min="05:00" max="22:59" value="07:00" required />
             <label for="to_inp">To:</label>
-            <input id="to_inp" type="time" name="to_time" min="5:01" max="23:00" value="16:00" />
+            <input id="to_inp" type="time" name="to_time" min="05:01" max="23:00" value="16:00" />
         </div>
-        <div id="subjects">
-            <!--Monday, Tuesday...-->
+        <div id="week_container">
+            <div class="day" id="mon_div" onmouseup="acceptDrop('mon_div')">
+                <div class="dayInfo">MON</div>
+            </div>
+            <div class="day" id="tue_div" onmouseup="acceptDrop('tue_div')">
+                <div class="dayInfo">TUE</div>
+            </div>
+            <div class="day" id="wed_div" onmouseup="acceptDrop('wed_div')">
+                <div class="dayInfo">WED</div>
+            </div>
+            <div class="day" id="thu_div" onmouseup="acceptDrop('thu_div')">
+                <div class="dayInfo">THU</div>
+            </div>
+            <div class="day" id="fri_div" onmouseup="acceptDrop('fri_div')">
+                <div class="dayInfo">FIR</div>
+            </div>
+            <div class="day" id="sat_div" onmouseup="acceptDrop('sat_div')">
+                <div class="dayInfo">SAT</div>
+            </div>
+            <div class="day" id="sun_div" onmouseup="acceptDrop('sun_div')">
+                <div class="dayInfo">SUN</div>
+            </div>
         </div>
     </div>
     <div>
@@ -35,7 +57,8 @@
                 int i = 0;
                 foreach (Subject subject in info.Subjects)
                 {
-                    <div>
+                    string lowerName = subject.Name.ToLowerInvariant();
+                    <div id="subject_@lowerName" onmousedown="startDrag('subject_@lowerName', [ '@lowerName', '@subject.Description' ])">
                         <p>@subject.Name</p>
                         <p>@subject.Description</p>
                     </div>
@@ -45,11 +68,42 @@
         </div>
     </div>
     <script>
-        var subjects = new Set([["None", ""], @Html.Raw(string.Join(", ", info.Subjects.Select(subject => $"[ \"{subject.Name}\", \"{subject.Description}\" ]"))) ]);
+        var subjects = new Set([["None", ""], @Html.Raw(string.Join(", ", info.Subjects.Select(subject => $"[ \"{subject.Name.ToLowerInvariant()}\", \"{subject.Description}\" ]"))) ]);
 
         var addNameInp;
         var addDescInp;
         var subjectContainer;
+
+        var dragging = false;
+        var dragObject;
+        var dragInfo;
+
+        function acceptDrop(myId) {
+            if (!dragging) return;
+
+            var div = document.getElementById(myId);
+            var day = myId.split('_')[0];
+
+            dragging = false;
+            dragObject.id = "";
+            dragObject.style = "";
+            dragObject.className = "inSchSubj"
+            div.appendChild(dragObject);
+        }
+
+        function startDrag(objId, info) {
+            if (dragging) {
+                console.log("something went wrong dragging: true");
+                return;
+            }
+
+            dragging = true;
+            dragObject = document.getElementById(objId).cloneNode(true);
+            dragObject.id = "drag_object";
+            dragObject.style.position = "absolute";
+            document.body.appendChild(dragObject);
+            dragInfo = info;
+        }
 
         async function addSubjectFromInp() {
             return await addSubject(addNameInp.value, addDescInp.value, true);
@@ -60,7 +114,7 @@
                 err = "Name must be between 1-10 characters";
             else if (desc.length > 30)
                 err = "Description must be between 0-30 characters";
-            else if (set_some(subjects, array => array[0] === name))
+            else if (set_some(subjects, array => array[0] === name.toLowerCase()))
                 err = `There already is a subject with the name '${name}'`;
 
             if (err !== null) {
@@ -71,7 +125,7 @@
             } else {
                 var response;
                 try {
-                    response = await fetch("/api/subject/add", { method: "PUT", body: JSON.stringify({ "name": name, "desc": desc }) });
+                    response = await fetch("/api/subject/add", { method: "PUT", body: JSON.stringify({ "name": name.toLowerCase(), "desc": desc }) });
                 } catch (error) {
                     if (popup)
                         alert("There was an error adding the subject: " + error);
@@ -88,13 +142,14 @@
 
                 addSubjectElement(name, desc);
 
-                subjects.add([name, desc]);
+                subjects.add([name.toLowerCase(), desc]);
 
                 return true;
             }
         }
 
         function addSubjectElement(name, desc) {
+
             var div = document.createElement("div");
             var pName = document.createElement("p");
             var pDesc = document.createElement("p");
@@ -104,6 +159,14 @@
 
             div.appendChild(pName);
             div.appendChild(pDesc);
+
+            name = name.toLowerCase();
+
+            div.id = `subject_${name}`;
+            div.onmousedown = function () {
+                startDrag(`subject_${name}`, [name, desc]);
+            };
+
             subjectContainer.appendChild(div);
         }
 
@@ -113,6 +176,26 @@
             subjectContainer = document.getElementById("subject_container");
 
             addSubjectElement("None", "");
+
+            document.addEventListener('mousemove', function (e) {
+                var x = e.clientX;
+                var y = e.clientY;
+
+                if (dragging) {
+                    dragObject.style.left = x + 15 + 'px';
+                    dragObject.style.top = y + 10 + 'px';
+                }
+            });
+
+            document.addEventListener('mouseup', function (event) {
+                if (!dragging) return;
+
+                //if (event.target === null) {
+                    dragging = false;
+                    dragObject.remove();
+                    dragInfo = null;
+                //}
+            });
         });
     </script>
 </body>

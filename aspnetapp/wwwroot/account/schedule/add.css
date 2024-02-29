@@ -1,0 +1,18 @@
+﻿body {
+}
+
+.day {
+    height: 3.5rem;
+}
+
+.dayInfo {
+    height: 3.5rem;
+    display: inline-block;
+}
+
+.inSchSubj {
+    height: 100%;
+    width: 3.5rem;
+    display: inline-block;
+    overflow: hidden;
+}
