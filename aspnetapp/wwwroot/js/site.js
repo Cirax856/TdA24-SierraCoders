@@ -18,3 +18,20 @@ function set_every(set, predicate) {
 
     return true;
 }
+
+function stringToColor(str) {
+    // Simple hash function
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    // Convert hash to a hexadecimal color
+    let color = '#';
+    for (let j = 0; j < 3; j++) {
+        let value = (hash >> (j * 8)) & 0xFF;
+        color += ('00' + value.toString(16)).substr(-2); // Ensure two digits
+    }
+
+    return color;
+}

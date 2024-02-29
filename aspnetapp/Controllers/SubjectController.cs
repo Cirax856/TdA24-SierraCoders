@@ -38,6 +38,9 @@ namespace aspnetapp.Controllers
                 if (jo is not null && jo.TryGetValue("name", out JToken name) && name.Type == JTokenType.String && jo.TryGetValue("desc", out JToken desc) && desc.Type == JTokenType.String)
                 {
                     Subject subject = new Subject(name.ToObject<string>()!, desc.ToObject<string>()!);
+                    if (subject.Name.Length < 1 || subject.Name.Length > 4 || subject.Description.Length > 30)
+                        return BadRequest();
+
                     var subjects = Database.GetSchedule(account.LecturerGuid).Subjects;
                     if (subjects.Contains(subject))
                         return Conflict("Subject with this name already exists");

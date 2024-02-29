@@ -47,7 +47,7 @@
         <div>
             <h3>Add Subject</h3>
             <label for="add_name_inp">Name:</label>
-            <input id="add_name_inp" type="text" minLength="1" maxlength="10" />
+            <input id="add_name_inp" type="text" minLength="1" maxlength="4" />
             <label for="add_decs_inp">Description:</label>
             <input id="add_decs_inp" type="text" minLength="0" maxlength="30" />
             <button type="button" onclick="addSubjectFromInp()">Add</buttont>
@@ -88,6 +88,7 @@
             dragObject.id = "";
             dragObject.style = "";
             dragObject.className = "inSchSubj"
+            dragObject.style.backgroundColor = stringToColor(dragInfo[0]);
             div.appendChild(dragObject);
         }
 
@@ -110,8 +111,8 @@
         }
         async function addSubject(name, desc, popup) {
             var err = null;
-            if (name.length < 1 || name.length > 10)
-                err = "Name must be between 1-10 characters";
+            if (name.length < 1 || name.length > 4)
+                err = "Name must be between 1-4 characters";
             else if (desc.length > 30)
                 err = "Description must be between 0-30 characters";
             else if (set_some(subjects, array => array[0] === name.toLowerCase()))
@@ -166,6 +167,7 @@
             div.onmousedown = function () {
                 startDrag(`subject_${name}`, [name, desc]);
             };
+            div.style.backgroundColor = stringToColor(name);
 
             subjectContainer.appendChild(div);
         }
@@ -191,9 +193,9 @@
                 if (!dragging) return;
 
                 //if (event.target === null) {
-                    dragging = false;
-                    dragObject.remove();
-                    dragInfo = null;
+                dragging = false;
+                dragObject.remove();
+                dragInfo = null;
                 //}
             });
         });
