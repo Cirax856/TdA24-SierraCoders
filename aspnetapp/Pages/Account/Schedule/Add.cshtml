@@ -57,25 +57,13 @@
             <input id="add_name_inp" type="text" minLength="1" maxlength="4" />
             <label for="add_decs_inp">Description:</label>
             <input id="add_decs_inp" type="text" minLength="0" maxlength="30" />
-            <button type="button" onclick="addSubjectFromInp()">Add</buttont>
+            <button type="button" onclick="addSubjectFromInp()">Add</button>
         </div>
         <div id="subject_container">
-            @{
-                int i = 0;
-                foreach (Subject subject in info.Subjects)
-                {
-                    string lowerName = subject.Name.ToLowerInvariant();
-                    <div id="subject_@lowerName" onmousedown="startDrag('subject_@lowerName', [ '@lowerName', '@subject.Description' ])">
-                        <p>@subject.Name</p>
-                        <p>@subject.Description</p>
-                    </div>
-                    i++;
-                }
-            }
         </div>
     </div>
     <script>
-        var subjects = new Set([["None", ""], @Html.Raw(string.Join(", ", info.Subjects.Select(subject => $"[ \"{subject.Name.ToLowerInvariant()}\", \"{subject.Description}\" ]"))) ]);
+        var subjects = new Set([["none", ""], @Html.Raw(string.Join(", ", info.Subjects.Select(subject => $"[ \"{subject.Name.ToLowerInvariant()}\", \"{subject.Description}\" ]"))) ]);
 
         // [name, description, length in minutes]
         var schedule = [[], [], [], [], [], [], []];
@@ -210,9 +198,13 @@
             timeInp.type="number";
             timeInp.min = 10;
             timeInp.max = 120;
+            timeInp.value = 45;
             timeInp.onchange = function() {
-
+                schedule[dayId][Array.prototype.indexOf.call(div.children, thisObj)][2] = parseInt(timeInp.value);
+                ensureFromTo();
             }
+
+            dragObject.appendChild(timeInp);
 
             div.appendChild(dragObject);
 
@@ -291,7 +283,7 @@
             var pName = document.createElement("p");
             var pDesc = document.createElement("p");
 
-            pName.innerText = name;
+            pName.innerText = name.toUpperCase();
             pDesc.innerText = desc;
 
             div.appendChild(pName);
@@ -316,7 +308,9 @@
             fromTimeInp = document.getElementById("from_inp");
             toTimeInp = document.getElementById("to_inp");
 
-            addSubjectElement("None", "");
+            subjects.forEach(function (value, idk, theSet) {
+                addSubjectElement(value[0], value[1]);
+            });
 
             document.addEventListener('mousemove', function (e) {
                 var x = e.clientX;
