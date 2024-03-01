@@ -80,6 +80,16 @@
         // [name, description, length in minutes]
         var schedule = [[], [], [], [], [], [], []];
 
+        var dayContainerIDs = [
+            "mon_div",
+            "tue_div",
+            "wed_div",
+            "thu_div",
+            "fri_div",
+            "sat_div",
+            "sun_div"
+        ];
+
         var addNameInp;
         var addDescInp;
         var subjectContainer;
@@ -97,6 +107,9 @@
             var toSplit = toTimeInp.value.split(':');
             var to = parseInt(toSplit[0]) * 60 + parseInt(toSplit[1]);
             var longest = calculateLongestDay();
+
+            from = Math.max(from, 5 * 60);
+            to = Math.min(to, 23 * 60);
 
             if (from + longest >= to) {
                 to = Math.min(from + longest + 1, 23 * 60);
@@ -123,19 +136,10 @@
             return length;
         }
         function updateLengths() {
-            var dayContainers = [
-                "mon_div",
-                "tue_div",
-                "wed_div",
-                "thu_div",
-                "fri_div",
-                "sat_div",
-                "sun_div"
-            ];
             var scheduleLength = calculateScheduleLength();
-            for (var i = 0; i < dayContainers.length; i++) {
+            for (var i = 0; i < dayContainerIDs.length; i++) {
                 var k = 0;
-                const container = document.getElementById(dayContainers[i]);
+                const container = document.getElementById(dayContainerIDs[i]);
                 for (var j = 0; j < container.children.length; j++) {
                     var child = container.children[j];
                     if (child != undefined && child.id === "inSchSubj") {
@@ -190,10 +194,24 @@
             dragObject.style = "";
             dragObject.className = "inSchSubj"
             dragObject.style.backgroundColor = stringToColor(dragInfo[0]);
+
+            var delBtn = document.createElement("button");
+            delBtn.innerHTML = "DEL";
+            var j = schedule[dayId].length - 1;
+            delBtn.onclick = function () {
+                removeHour(dayId, j);
+            }
+
+            dragObject.appendChild(delBtn);
+
             div.appendChild(dragObject);
 
             ensureFromTo();
             //udateLength(dragObject, time);
+        }
+        function removeHour(dayIndex, hourIndex) {
+            schedule[dayIndex].splice(hourIndex, 1);
+            document.getElementById(dayContainerIDs[dayIndex]).children[hourIndex].remove();
         }
 
         function startDrag(objId, info) {
@@ -211,7 +229,12 @@
         }
 
         async function addSubjectFromInp() {
-            return await addSubject(addNameInp.value, addDescInp.value, true);
+            if (await addSubject(addNameInp.value, addDescInp.value, true)) {
+                addNameInp.value = "";
+                addDescInp.value = "";
+                return true;
+            } else
+                return false;
         }
         async function addSubject(name, desc, popup) {
             var err = null;
@@ -252,7 +275,6 @@
                 return true;
             }
         }
-
         function addSubjectElement(name, desc) {
 
             var div = document.createElement("div");
