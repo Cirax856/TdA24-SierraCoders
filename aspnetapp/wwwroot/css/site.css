@@ -58,6 +58,45 @@ body {
                 padding-right: .2vw;
             }
 
+    .topbar > .a {
+        width: 20%;
+        height: 80%;
+        background-color: #00384D;
+        border-radius: 6px;
+        color: white;
+        font-size: 2vw;
+        display: grid;
+        grid-template-columns: 70% 30%;
+        grid-template-rows: 50% 50%;
+    }
+
+        .topbar > .a > .div {
+            width: 100%;
+            height: 100%;
+            grid-row-start: span 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .topbar > .a > .div > img {
+                width: 90%;
+                height: 90%;
+            }
+
+        .topbar > .a > .div2 {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+            .topbar > .a > .div2 > a > div > p {
+                font-size: 1.5vw;
+            }
+
     .topbar > .selected {
         background-color: #74C7D3;
     }
@@ -219,6 +258,7 @@ body {
 .login {
     padding-left: 1rem;
     font-size: 3vh;
+    color: var(--text-color);
 }
 
     .login > .input {
@@ -348,6 +388,16 @@ body {
                 width: 1rem;
                 height: 1rem;
             }
+
+.account {
+    padding: 1rem;
+    font-size: 200%;
+    color: var(--text-color);
+}
+
+    .account > a {
+        text-decoration: none;
+    }
 
 ::-webkit-scrollbar {
     width: 10px;

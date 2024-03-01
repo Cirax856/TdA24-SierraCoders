@@ -4,17 +4,20 @@
 }
 
 <body>
-    <p>Username: @Model.Account.Username</p>
-    <p>Email: @Model.Account.Email</p>
-    @{
-        if (Model.Account.HasLecturer)
-        {
-            <a href="/account/lecturer">Change your lecturer info</a>
-        } else
-        {
-            <a href="/account/lecturer" style="color: red">You haven't filled out your lecturer info yet!</a>
-        }
-    }
-    <br />
-    <a href="/account/schedule">Schedule</a>
+	<div class="account">
+		<p>Username: @Model.Account.Username</p>
+		<p>Email: @Model.Account.Email</p>
+		@{
+			if (Model.Account.HasLecturer)
+			{
+				<button class="submit" onclick="window.location.replace('./account/lecturer')" style="width: max-content;">Change your lecturer info</button>
+			}
+			else
+			{
+				<button class="submit" onclick="window.location.replace('./account/lecturer')" style="width: max-content;">You haven't filled out your lecturer info yet!</button>
+			}
+		}
+		<br />
+		<button class="submit" onclick="window.location.replace('./account/schedule')">Schedule</button>
+	</div>
 </body>

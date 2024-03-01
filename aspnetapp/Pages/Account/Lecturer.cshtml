@@ -4,7 +4,7 @@
 }
 
 <body>
-    <form method="post">
+    <form method="post" class="login">
         <div>
             <h2>Name:</h2>
             <label for="title_before">Title before:</label>
@@ -19,7 +19,7 @@
             <input name="title_after" id="title_after" type="text" value="@Model.Lecturer.title_after" />
         </div>
         <div>
-            <h2>Lorem ipsum</h2>
+            <h2>Details:</h2>
             <label for="picture_url">Url to your pfp:</label>
             <input name="picture_url" id="picture_url" type="text" value="@Model.Lecturer.picture_url" /><br />
             <label for="location">Location:</label>
@@ -34,7 +34,7 @@
             <input name="price_per_hour" id="price_per_hour" type="number" min="0" value="@Model.Lecturer.price_per_hour" />
         </div>
         <div>
-            <h2>Contact</h2>
+            <h2>Contact:</h2>
             <h3>Email(s)*</h3>
             <div>
                 <label for="add_email_inp">Email:</label>

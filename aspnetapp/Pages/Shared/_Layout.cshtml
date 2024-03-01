@@ -21,9 +21,10 @@
         @{
             if (Context.Request.Cookies.TryGetValue("session", out string session) && AccountManager.TryGetAcount(session, out Account acount))
             {
-                <div class="tab" id="topSignInDiv">
-                    <a href="/account" style="font-size: 20px" class="stylessLink"><div><p>@acount.Username</p></div></a>
-                    <a href="/account/logout" style="font-size: 20px" class="stylessLink"><div><p>Log out</p></div></a>
+                <div class="a tab" id="topSignInDiv">
+                    <div class="div2"><a href="/account" style="font-size: 20px" class="stylessLink"><div><p>@acount.Username</p></div></a></div>
+                    <div class="div"><img src="/images/Sign In Icon.svg" alt="Sign In Icon" /></div>
+                    <div class="div2"><a href="/account/logout" style="font-size: 20px" class="stylessLink"><div><p>Log out</p></div></a></div>
                 </div>
             }
             else
