@@ -11,7 +11,7 @@ namespace aspnetapp.Pages.Account
     public class LecturerModel : LoggedInPage
     {
         public string Error { get; private set; }
-        public Lecturer Lecturer { get; private set; }
+        public Models.Lecturer Lecturer { get; private set; }
 
         public ActionResult OnGet()
         {
@@ -21,10 +21,10 @@ namespace aspnetapp.Pages.Account
             if (account.HasLecturer)
                 Lecturer = Database.GetLecturer(account.LecturerGuid).Clone();
             else
-                Lecturer = new Lecturer();
+                Lecturer = new Models.Lecturer();
 
             if (Lecturer.contact is null)
-                Lecturer.contact = new Lecturer.Contact();
+                Lecturer.contact = new Models.Lecturer.Contact();
 
             return Page();
         }
@@ -37,10 +37,10 @@ namespace aspnetapp.Pages.Account
             if (account.HasLecturer)
                 Lecturer = Database.GetLecturer(account.LecturerGuid).Clone();
             else
-                Lecturer = new Lecturer();
+                Lecturer = new Models.Lecturer();
 
             if (Lecturer.contact is null)
-                Lecturer.contact = new Lecturer.Contact();
+                Lecturer.contact = new Models.Lecturer.Contact();
 
             IFormCollection form = Request.Form;
 
@@ -66,7 +66,7 @@ namespace aspnetapp.Pages.Account
             if (form.TryGetValue("tags", out StringValues _tags))
                 Lecturer.tags = _tags.ToString().Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).Select(_tag =>
                 {
-                    Lecturer.Tag tag = new Lecturer.Tag()
+					Models.Lecturer.Tag tag = new Models.Lecturer.Tag()
                     {
                         name = _tag,
                         uuid = _tag.GetHash()

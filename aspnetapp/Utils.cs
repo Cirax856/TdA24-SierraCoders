@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace aspnetapp
 {
@@ -133,5 +134,8 @@ namespace aspnetapp
                 DayOfWeek.Sunday =>    6,
                 _ =>                   0
             };
+
+        public static DateOnly ClampToMonday(this DateOnly date)
+            => date.AddDays(-(date.DayOfWeek.ToInt() % 7));
     }
 }

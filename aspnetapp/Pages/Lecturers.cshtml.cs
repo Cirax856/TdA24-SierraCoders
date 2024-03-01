@@ -25,7 +25,7 @@ public class LecturersModel : PageModel
             searchQuery = _searchQuery.ToString().ToLowerInvariant();
 
         lecturers = Database.lectuerers.ToArray();
-        result = Searcher.Search(Database.lectuerers.ToArray(), lecturer => ((Lecturer)lecturer.Value).DisplayName.ToLowerInvariant(), searchQuery).ToList();
+        result = Searcher.Search(Database.lectuerers.ToArray(), lecturer => ((Models.Lecturer)lecturer.Value).DisplayName.ToLowerInvariant(), searchQuery).ToList();
 
         if (result.Count == 0)
             return Page();
@@ -55,7 +55,7 @@ public class LecturersModel : PageModel
 
         for (i = 0; i < result.Count; i++)
         {
-            Lecturer lec = lecturers[result[i].OgIndex].Value;
+			Models.Lecturer lec = lecturers[result[i].OgIndex].Value;
             if (lec.price_per_hour < minPrice || lec.price_per_hour > maxPrice || (location != string.Empty && Searcher.Rate(lec.location.ToLowerInvariant(), 0, location).Score < 0f))
             {
                 result.RemoveAt(i);

@@ -24,7 +24,7 @@ namespace aspnetapp.Pages.Account
                     ScheduleDate = DateOnly.FromDateTime(DateTime.UtcNow);
 
                 // "clamp" to monday, need to use ToInt, because 0 - sunday, 1 - monday WTF???
-                ScheduleDate = ScheduleDate.AddDays(-(ScheduleDate.DayOfWeek.ToInt() % 7));
+                ScheduleDate = ScheduleDate.ClampToMonday();
 
                 return Page();
             }

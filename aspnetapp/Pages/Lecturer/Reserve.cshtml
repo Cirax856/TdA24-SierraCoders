@@ -1,0 +1,17 @@
+﻿@page
+@model aspnetapp.Pages.Lecturer.ReserveModel
+@{
+}
+
+<body>
+    <h2>Make a reservation for: @Model.Lecturer.DisplayName</h2>
+    <input type="date" value="@Model.Date.ToString("yyyy-MM-dd")" min="@DateOnly.FromDateTime(DateTime.UtcNow).ClampToMonday().ToString("yyyy-MM-dd")" onchange="dateChanged(event)" />
+
+    <script>
+        function dateChanged(e) {
+			var searchParams = new URLSearchParams(window.location.search);
+			searchParams.set("date", e.target.value);
+			window.location.search = searchParams.toString();
+		}
+    </script>
+</body>

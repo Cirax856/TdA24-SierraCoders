@@ -9,7 +9,7 @@ namespace aspnetapp.Pages
 {
     public class lecturerModel : PageModel
     {
-        public Lecturer lecturer { get; private set; }
+        public Models.Lecturer lecturer { get; private set; }
 
         public IActionResult OnGet()
         {
