@@ -197,12 +197,22 @@
 
             var delBtn = document.createElement("button");
             delBtn.innerHTML = "DEL";
-            var j = schedule[dayId].length - 1;
+
+            var thisObj = dragObject;
+
             delBtn.onclick = function () {
-                removeHour(dayId, j);
+                removeHour(dayId, Array.prototype.indexOf.call(div.children, thisObj));
             }
 
             dragObject.appendChild(delBtn);
+
+            var timeInp = document.createElement("input");
+            timeInp.type="number";
+            timeInp.min = 10;
+            timeInp.max = 120;
+            timeInp.onchange = function() {
+
+            }
 
             div.appendChild(dragObject);
 
